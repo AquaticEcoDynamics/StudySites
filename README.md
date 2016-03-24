@@ -1,2 +1,2 @@
 # StudySites
-Folder contain model input files for various estuaries and lakes
+Folder containing model input files for various estuaries and lakes
