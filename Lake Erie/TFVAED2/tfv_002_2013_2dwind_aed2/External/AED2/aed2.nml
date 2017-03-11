@@ -16,9 +16,10 @@
    do_limiter = .true.
  ! do_2d_atm_flux = .TRUE.
  ! do_particle_bgc = .false.
+   display_minmax = .false.
    glob_min = -1e38
    glob_max = 1e38
-   min_water_depth = 0.0401
+   min_water_depth =0.0401
    n_equil_substep = 12
    !-- Linkages with host model: PHYSICS
    link_bottom_drag = .false.
@@ -27,7 +28,7 @@
    !-- Linkages with host model: LIGHT
    link_ext_par = .false.
    link_water_clarity = .false.
-   base_par_extinction = 0.4
+   base_par_extinction = 0.2
    ext_tss_extinction = .false.
    tss_par_extinction = 0.02
    !-- Linkages with host model: RIPARIAN
@@ -52,7 +53,7 @@
 !-------------------------------------------------------------------------------
 
 &aed2_models
-    models = 
+    models =
        !-->  NUTRIENT/CHEMISTRY modules  <--!
         !off 'aed2_sedflux',
              'aed2_tracer',
@@ -62,22 +63,21 @@
              'aed2_nitrogen',
              'aed2_phosphorus',
              'aed2_organic_matter',
-        !off 'aed2_seddiagenesis', 
-!move here   'aed2_geochemistry',
+        !off 'aed2_seddiagenesis',
+        !off 'aed2_geochemistry',
        !-->  BIOLOGY modules  <--!
              'aed2_phytoplankton',
-        !off 'aed2_geochemistry',
         !off 'aed2_zooplankton',
         !off 'aed2_bivalve',
         !off 'aed2_macrophyte',
         !off 'aed2_pathogens',
-       !-->  RIPARIAN modules  <--!            
+       !-->  RIPARIAN modules  <--!
         !off 'aed2_land',
         !off 'aed2_ass',
         !off 'aed2_vegetation',
-       !-->  SUMMARY modules  <--!            
-             'aed2_totals',    
-        !off 'aed2_habitat',    
+       !-->  SUMMARY modules  <--!
+             'aed2_totals',
+        !off 'aed2_habitat',
 /
 
 !###############################################################################
@@ -153,22 +153,25 @@
 !   fsed        = list of sedimentation fluxes for the tracers
 !-------------------------------------------------------------------------------
 &aed2_tracer
-   ! Optional retention time tracer
-   retention_time = .true.
-   ! Select number of tracers and their decay/settling/light properties
-   num_tracers = 1
-   decay = 0      !, 0, 0, ...
-   settling = -0.03  !, 0, 0, ....
-   fsed = 0       !, 0, 0, ...
-   Ke_ss = 0.06,0.063 
-   ! Configure resuspension of SS groups
-   resuspension = 0
-   epsilon = 0.007 !, 0.001
-   tau_0 = 0.03   !, 0.05
-   tau_r = 1.0    !, 1
-!   tau_0_min = 0.1
-!   Ktau_0    = 0.1
-!   macrophyte_link_var = 'MAC_ruppia'
+   !-- Optional retention time tracer
+    retention_time = .true.
+   !-- Select number of tracers/ss's and their decay/sedflux/light properties
+    num_tracers = 1
+    decay = 0,0
+    Fsed = 0,0
+    Ke_ss = 0.06,0.063
+   !-- Configure sediment resuspension
+    settling = 3
+    w_ss = -0.000001
+    d_ss = 2e-6,1e-5
+    rho_ss = 1.5e3,1.8e3
+   !-- Configure sediment resuspension
+    resuspension = 1
+    epsilon = 0.0070
+    tau_0 = 0.03
+    tau_r = 1.0
+    Ktau_0 = 0.001
+    macrophyte_link_var = ''
 /
 
 !-------------------------------------------------------------------------------
@@ -201,7 +204,7 @@
    theta_sed_oxy = 1.05
  ! Fsed_oxy_variable = 'SDF_Fsed_oxy'
    oxy_min = 0
-   oxy_max = 500 
+   oxy_max = 500
 /
 
 
@@ -338,24 +341,38 @@
 !
 !-------------------------------------------------------------------------------
 &aed2_nitrogen
-   amm_initial = 12.7, !average for 08-Sep-2009
-   nit_initial = 23.5, !average for 08-Sep-2009
-   Rnitrif = 0
-   Rdenit = 0.26,      !from WC denit rates
-   Fsed_amm = 3.5,     !maximum measured by Keryn #BB
-   Fsed_nit = -4.5,    !maximum measured by Keryn
-   Knitrif = 0
+   ! Initial values
+   amm_initial = 12.7
+   nit_initial = 23.5
+   n2o_initial = 23.5
+   ! Reaction rates of core pathways
+   Rnitrif = 0.1
+   Knitrif = 78.1
+   theta_nitrif = 1.08,
+   nitrif_reactant_variable='OXY_oxy',
+   Rdenit = 0.26,
    Kdenit = 2.0,
-   Ksed_amm = 25.0,
-   Ksed_nit = 100.0,
-   theta_nitrif = 1.08
    theta_denit = 1.08,
-   theta_sed_amm = 1.05
-   theta_sed_nit = 1.05
-   nitrif_reactant_variable='OXY_oxy',   
-   denit_product_variable='', !'N20',
-  !Fsed_amm_variable='Fsed_amm'
-  !Fsed_nit_variable='Fsed_nit'
+   Ranammox = 0.001,
+   Kanmx_nit = 2.0,
+   Kanmx_amm = 2.0,
+   Rdnra = 0.01,
+   Kdnra_oxy = 2.0,
+   ! N2O option reaction rates
+   simN2O = .false.
+   Rn2o = 0.05,
+   Cn2o_atm = 0.32  ! ppm
+   !-- Sediment fluxes
+   Fsed_amm = 3.5,
+   Ksed_amm = 25.0,
+   Fsed_nit = -4.5,
+   Ksed_nit = 100.0,
+   Fsed_n2o = -4.5,
+   Ksed_n2o = 100.0,
+   theta_sed_amm = 1.08,
+   theta_sed_nit = 1.08,
+  !Fsed_amm_variable='SDF_Fsed_amm'
+  !Fsed_nit_variable='SDF_Fsed_nit'
 /
 
 !-------------------------------------------------------------------------------
@@ -415,7 +432,7 @@
    ads_use_pH = .false.
    Kadsratio= 1.0
    Qmax = 1.0
-   w_po4ads = -0.01   ! doesnt seem to work
+   w_po4ads = -9999
 /
 
 !-------------------------------------------------------------------------------
@@ -470,77 +487,76 @@
 !
 !-------------------------------------------------------------------------------
 &aed2_organic_matter
-    !-- ORGANIC CARBON
-   poc_initial = 78.5, !average for 08-Sep-2009
-   doc_initial = 39.9, !average for 08-Sep-2009
-   w_poc = -0.005,
-   Rpoc_miner = 0.002,
-   Rdoc_miner = 0.002,
-   Fsed_poc = 0.0,
-   Fsed_doc = 0.0,
-   Kpoc_miner = 31.25,
-   Kdoc_miner = 31.25,
-   Ksed_doc = 4.5,
-   theta_poc_miner = 1.08,
-   theta_doc_miner = 1.07,
-   theta_sed_doc = 1.08,
-   KeDOMR       = 0.02
-   KeCPOM       = 0.02
-   doc_miner_reactant_variable='OXY_oxy',   
-   doc_miner_product_variable='',
-   !-- ORGANIC NITROGEN
-   pon_initial = 8.3, !average for 08-Sep-2009
-   don_initial = 1.3, !average for 08-Sep-2009
-   w_pon = -0.005,
-   Rpon_miner = 0.002,
-   Rdon_miner = 0.007,
-   Fsed_pon = 0.0,
-   Fsed_don = 0.00,
-   Kpon_miner = 31.25,
-   Kdon_miner = 31.25,
-   Ksed_don = 4.5,
-   theta_pon_miner = 1.08,
-   theta_don_miner = 1.08,
-   theta_sed_don = 1.08,
-   don_miner_product_variable='NIT_amm',
-   !-- ORGANIC PHOSPHORUS
-   pop_initial = 8.3,
-   dop_initial = 1.5,
-   w_pop = -0.008,
-   Rpop_miner = 0.002,
-   Rdop_miner = 0.007,
-   Fsed_pop = 0.00,
-   Fsed_dop = -0.01,
-   Kpop_miner = 31.25,
-   Kdop_miner = 31.25,
-   Ksed_dop = 4.5,
-   theta_pop_miner = 1.08,
-   theta_dop_miner = 1.08,
-   theta_sed_dop = 1.08,
-   !pop_miner_reactant_variable='',   
-   dop_miner_product_variable='PHS_frp',
-!  Fsed_pon_variable='Fsed_pon'
-!  Fsed_don_variable='Fsed_don'
-!  Fsed_pop_variable='Fsed_pop'
-!  Fsed_dop_variable='Fsed_dop'
-!  Fsed_poc_variable='Fsed_poc'
-!  Fsed_doc_variable='Fsed_doc'
-   !-- REFRACTORY ORGANIC MATTER
-   simRPools    = .false.
-   docr_initial = 350.00
-   donr_initial = 13.0
-   dopr_initial = 3.0
-   cpom_initial = 100.00
-   Rdocr_miner  = 0.00
-   Rdonr_miner  = 0.00
-   Rdopr_miner  = 0.00
-   Rcpom_bdown  = 0.00
-   w_cpom       = 0.00 ! -0.01
-   X_cpom_n     = 0.005
-   X_cpom_p     = 0.0001
-   KeDOMR       = 0.02
-   KeCPOM       = 0.02
-   extra_diag   = .false.
+   !-- Initial concentrations for OM variables (mmol/m3)
+          poc_initial  = 78.5
+          doc_initial  = 39.9
+          pon_initial  = 8.3
+          don_initial  = 1.3
+          pop_initial  = 8.3
+          dop_initial  = 1.5
+          docr_initial = 350.00
+          donr_initial = 13.0
+          dopr_initial = 3.0
+          cpom_initial = 100.00
+   !-- Breakdown and mineralisation (basic pool)
+          Rpoc_hydrol  = 0.05
+          Rdoc_minerl  = 0.001
+          Rpon_hydrol  = 0.05
+          Rdon_minerl  = 0.005
+          Rpop_hydrol  = 0.05
+          Rdop_minerl  = 0.001
+          theta_hydrol = 1.08
+          theta_minerl = 1.08
+          Kpom_hydrol  = 31.25
+          Kdom_minerl  = 31.25
+          doc_miner_reactant_variable='OXY_oxy'
+          doc_miner_product_variable=''
+          don_miner_product_variable='NIT_amm'
+          dop_miner_product_variable='PHS_frp'
+          !-- Refractory organic matter (optional)
+          simRPools    = .false.
+          Rdocr_miner  = 0.0001
+          Rdonr_miner  = 0.0001
+          Rdopr_miner  = 0.0001
+          Rcpom_bdown  = 0.0001
+          X_cpom_n     = 0.0005
+          X_cpom_p     = 0.0001
+          !-- Light related parameters
+          KeDOM        = 0.000005
+          KePOM        = 0.00096
+          KeDOMR       = 0.10000    ! = 1 (assuming KeDOMR is applied to CDOM in /m)
+          KeCPOM       = 0.00096    ! = 0.08 (/m)/(mg/L)  /83.3  (mmol/m3)/(mg/L)
+          simphotolysis = .false. !.true.
+          !photo_fmin
+          photo_c      = 0.75
+          !-- Particle settling parameters
+          settling     = 3
+          w_pom        = -0.06
+          d_pom        = 1e-5
+          rho_pom      = 1.2e3
+          w_cpom       = -0.01
+          d_cpom       = 1e-5
+          rho_cpom     = 1.4e3
+          !-- Sediment interaction parameters (basic model)
+          resuspension = 0
+          resus_link   = '' !BB Was TRC_resus but that required resuspension on.
+          sedimentOMfrac = 0.00002
+          Xsc = 0.5
+          Xsn = 0.05
+          Xsp = 0.005
+          Fsed_doc = 0.0
+          Fsed_don = 0.0
+          Fsed_dop = 0.0
+         !Fsed_doc_variable,
+         !Fsed_dop_variable,
+         !Fsed_don_variable,
+          Ksed_dom = 4.5
+          theta_sed_dom = 1.08
+          !-- Other options
+          extra_diag = .false. !.true.
+          !poc_min, poc_max, doc_min, doc_max
+          !pon_min, pon_max, don_min, don_max
+          !pop_min, pop_max, dop_min, dop_max
 /
 
 !-------------------------------------------------------------------------------
@@ -579,24 +595,38 @@
 !
 !-------------------------------------------------------------------------------
 &aed2_phytoplankton
-   num_phytos = 5
-   the_phytos = 2,4,5,6,7
-   p_excretion_target_variable='OGM_dop'
-   n_excretion_target_variable='OGM_don'
-   c_excretion_target_variable='OGM_doc'
-   si_excretion_target_variable='SIL_rsi'
-   p_mortality_target_variable='OGM_pop'
-   n_mortality_target_variable='OGM_pon'
-   c_mortality_target_variable='OGM_poc'
-   si_mortality_target_variable=''
-   p1_uptake_target_variable='PHS_frp'
-   n1_uptake_target_variable='NIT_nit'
-   n2_uptake_target_variable='NIT_amm'
-   si_uptake_target_variable='SIL_rsi'
-   do_uptake_target_variable='OXY_oxy'
-   c_uptake_target_variable=''
-   extra_debug = .true.
-   dbase = '../External/AED2/aed2_phyto_pars.nml'
+   !-- Configure phytoplankton groups to simulate
+     num_phytos = 5
+     the_phytos = 1,2,3,4,5
+     settling =   1,1,1,1,1
+!    resuspension = 0.1
+   !-- Benthic phytoplankton group (microphytobenthos)
+     do_mpb = 1
+     R_mpbg = 0.5
+     R_mpbr = 0.05
+     I_Kmpb = 100.
+     mpb_max = 1.
+   !-- Set link variables to other modules
+     p_excretion_target_variable='OGM_dop'
+     n_excretion_target_variable='OGM_don'
+     c_excretion_target_variable='OGM_doc'
+     si_excretion_target_variable=''
+     p_mortality_target_variable='OGM_pop'
+     n_mortality_target_variable='OGM_pon'
+     c_mortality_target_variable='OGM_poc'
+     si_mortality_target_variable=''
+     p1_uptake_target_variable='PHS_frp'
+     n1_uptake_target_variable='NIT_nit'
+     n2_uptake_target_variable='NIT_amm'
+     si_uptake_target_variable='SIL_rsi'
+     do_uptake_target_variable='OXY_oxy'
+     c_uptake_target_variable=''
+   !-- General options
+     dbase = '../External/AED2/aed2_phyto_pars.nml'
+     extra_diag = .true.
+    !zerolimitfudgefactor = ??
+     min_rho = 900.
+     max_rho = 1200.
 /
 
 !-------------------------------------------------------------------------------
@@ -634,18 +664,6 @@
    pc_target_variable='OGM_poc'  ! particulate carbon target variable
 /
 
-
-!###############################################################################
-! aed2_pathogens
-!  num_pathogens = number of pathogens to model
-!  the_pathogens = list of pathogens classes (referencing the pathogens database)
-!-------------------------------------------------------------------------------
-&aed2_pathogens
-   num_pathogens = 1
-   the_pathogens = 1 !,3,5
-   ! NEED UPDATED VARS HERE
-   num_ss = 0
-/
 
 
 !-------------------------------------------------------------------------------
@@ -688,113 +706,9 @@
    mineral_link    = '','','',''
    w_gch           = 0.,0.,0.,0.
    !simEquilibrate = .false.
-   !min_initial    = 0.01,0.01,0.01,0.01 
+   !min_initial    = 0.01,0.01,0.01,0.01
 /
 
-
-!-------------------------------------------------------------------------------
-!###############################################################################
-! aed2_land - AED land/soil model
-!-------------------------------------------------------------------------------
-! oxy_initial   [float, unit = mmol/m^3]
-!                 initial O2 concentration (can be overwritten by GLM or TFV IC)
-! Fsed_oxy      [float, unit = mmol/m^2/day]
-!                 sediment oxygen demand (unused if Fsed_oxy_variable is active)
-! Ksed_oxy      [float, unit = mmol/m^3]
-!                 half-saturation concentration of oxygen sediment flux
-! theta_sed_oxy [float, unit = - ]
-!                 Arrhenius temperature multiplier for sediment oxygen flux
-!  Fsed_oxy_variable = Oxygen sedimentation variable link
-!                         eg 'aed_sedflux_Fsed_oxy' will use the value supplied
-!                          by the aed_sedflux model for Fsed_oxy
-!
-! NOTE: Processes such as photosynthesis and bacterial respiration from other
-!       AED modules should be configured to use the following names:
-!        aed_oxygen_oxy
-!
-! DIAGNOSTICS:
-!
-!-------------------------------------------------------------------------------
-&aed2_land
-   ! material zones to run the model:   
-    n_zones = 4
-    active_zones = 4,5,6,7
-   ! soil depth limits
-    minbathy = -2.0     !mAHD
-    Dper = 2,2,2,2  
-   ! soil properties 
-    Porosity = 0.4,0.35,0.3,0.3  
-    Density = 1500,1500,1500,1500 
-    Zcap = 0.1,0.08,0.1,0.1  
-    Ztrn = 0.1,0.05,0.06,0.06 
-    fc = 0.1,0.04,0.04,0.08 
-   ! evaporation parameters 
-    Zebs = 0.5,0.3,0.4,0.5  
-    aep = 0.8,0.7,1,1 
-   ! infiltration parameters 
-    infil_model = 1
-    phi = 0.01,0.02,0.02,0.01 
-    f0 = 0.1,0.1,0.1,0.1 
-    fmin = 0.1,0.1,0.1,0.1 
-    Fmax = 0.1,0.1,0.1,0.1 
-    regen = 0.1,0.1,0.1,0.1 
-    decay = 0.1,0.1,0.1,0.1 
-   ! flow  parameters 
-    ass = 0.0001,0.0003,0.0005,0.005  
-    Bss = 2,2,2,2  
-   ! optional extras
-    simTemp = .false.
-    simSalt = .false.
-    simErosion = .false.
-/
-
-
-!-------------------------------------------------------------------------------
-!###############################################################################
-! aed2_ass - AED acid sulfate soil model
-!-------------------------------------------------------------------------------
-! oxy_initial   [float, unit = mmol/m^3]
-!                 initial O2 concentration (can be overwritten by GLM or TFV IC)
-! Fsed_oxy      [float, unit = mmol/m^2/day]
-!                 sediment oxygen demand (unused if Fsed_oxy_variable is active)
-! Ksed_oxy      [float, unit = mmol/m^3]
-!                 half-saturation concentration of oxygen sediment flux
-! theta_sed_oxy [float, unit = - ]
-!                 Arrhenius temperature multiplier for sediment oxygen flux
-!  Fsed_oxy_variable = Oxygen sedimentation variable link
-!                         eg 'aed_sedflux_Fsed_oxy' will use the value supplied
-!                          by the aed_sedflux model for Fsed_oxy
-!
-! NOTE: Processes such as photosynthesis and bacterial respiration from other
-!       AED modules should be configured to use the following names:
-!        aed_oxygen_oxy
-!
-! DIAGNOSTICS:
-!
-!-------------------------------------------------------------------------------
-&aed2_ass
-   ! setup
-    n_zones = 4
-    active_zones = 4,5,6,7
-    nlay = 9
-    simProfiles = .TRUE.
-    zASS = 3,1,1,1
-    acid_link = 'GEO_ubalchg'
-    so4_link = 'GEO_SO4'
-    X_hso4 = 0.25
-   ! soil properties 
-    Porosity = 0.4,0.35,0.3,0.3  
-    Density = 1500,1500,1500,1500 
-    pass_0 = 10.,10.,10.,10. 
-   ! kinetic 
-    Racid = 0.006,0.015,0.011,0.011
-   ! flux coefficients  
-    flux_bf = 0.0,0,0,0
-    flux_rn = 1.0,0.5,1,1
-    flux_rn_max = 0.005,0.005,0.005,0.005
-    flux_rw_a = 0.161,0.138,0.138,0.138
-    flux_rw_d = 0.01,0.007,0.007,0.007
-/
 
 !###############################################################################
 ! aed2_totals
@@ -836,9 +750,3 @@
 !              'PHY_FDIAT'
 !  TSS_varscale = 1.0,2.1,0.1,0.1,2.1,0.1,0.1         !Needs fixing   !,  <vector same length as TSS names>
 /
-
-
-
-
-
-

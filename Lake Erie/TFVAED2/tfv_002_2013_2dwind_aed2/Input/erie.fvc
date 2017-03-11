@@ -96,6 +96,7 @@ INITIAL CONDITION 2D == ..\BCs\IC\IC_AED2_20130413.csv
 grid definition file == ..\BCs\Met\Met_Zones.nc
 grid definition variables == lon, lat
 grid definition label == NCEP
+ENDGRID
 
 bc == W10_GRID,NCEP, ..\BCs\Met\Met_Zones.nc
 bc header == time,u,v
