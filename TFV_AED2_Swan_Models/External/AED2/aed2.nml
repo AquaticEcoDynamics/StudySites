@@ -1,32 +1,81 @@
-!-------------------------------------------------------------------------------
-! aed
+! .***(((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((*.!
+!.(((((((((((((((((((((((/////****/////((((((((((((((((((((((((((((((((((((((((!
+!((((((((((((((((((/*,,,...,,,,************//((((((((((((((((((((((((((((((((((!
+!((((((((((((((/*.....**//((((((((((((((((////*//((((((((((((((((((((((((((((((!
+!((((((((((((/,.  .,-///((((((((((((((((((((//////(((((((((((((((((((((((((((((!
+!(((((((((/,,  ,*//((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((!
+!(((((((/*.  .*/(((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((!
+!((((((/*. ,,/(((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((!
+!((((((/. .**/(((((((((((((///////(((((///////////////////////////////(((((((((!
+!((((//,  *//(((((((((((((/,     .**/(/..             ,.            ...*/((((((!
+!((((**. ,/((((((((((((((/*.      ..*(/..   .,,,,,,,,**,    .,,,,,..    .,//(((!
+!(((/,,  ,/((((((((((((((/,    .    *//..   ,**////////,    .*/////*..   .**/((!
+!(((/,, .*((((((((((((((/*    ,*.   .**..   ,//(((((((/,    ./((((((//,   ..*((!
+!(((/.. .*((((((((((((((*.  ..*/*.   .*,,    ......**//,    ./((((((((*.    ,/(!
+!(((/.. .*((((((((((((//,   ,,/(/.   .,,,          ,,//,    ./((((((((*.    ,/(!
+!(((/,, .*/((((((((((/**.   ,,***,    .,,.  .******//(/,    ./((((((//*.  ..*/(!
+!(((/**. ,/((((((((((*..               ..,. ,//(((((((/,    ./(((((/**.   ,,/((!
+!((((**. .*(((((((((/,     .........   ..,,.,//////////,    .*/////*..   .**/((!
+!((((//*  ,//((((((/*.   .*/((((((//,    .,.         .,.               .,/(((((!
+!((((((/,  ,,/(((((/,....*/(((((((((/,....,*,........,*,...........,**//(((((((!
+!(((((((*. ..*/((((//***//(((((((((((//**////********////********/////(((((((((!
+!((((((((/,   ,/(((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((!
+!(((((((((/**. .,//((((((((((((((((((((((((((((((//((((((((((((((((((((((((((((!
+!((((((((((//*. .,,//(((((((((((((((((((((((((((///((((((((((((((((((((((((((((!
+!(((((((((((((//,.. .,**/((((((((((((((((((//////((((((((((((((((((((((((((((((!
+!(((((((((((((((/**,....,*////((((((((/////**///(((((((((((((((((((((((((((((((!
+!(((((((((((((((((((//**,,....,,,,,,,,***///(((((((((((((((((((((((((((((((((((!
+!.((((((((((((((((((((((((((////////((((((((((((((((((((((((((((((((((((((((**.!
+!###############################################################################
+! aed2_fv  :  Settings that control the coupling between TUFLOW-FV & AED2
 !-------------------------------------------------------------------------------
 !
-! solution_method (1: Euler's Method)
-! link_bottom_drag (T/F: AED variables included/excluded in TFV bottom drag)
-! link_surface_drag (T/F: AED variables included/excluded in TFV surface drag)
-! link_water_density (T/F: AED variables included/excluded in TFV density calculation)
-! link_water_clarity (T/F: AED variables included/excluded in TFV light extinction)
-! base_par_extinction (Kw; /m)
-! ext_tss_extinction (T/F: TFV SS concs included/excluded in extinction coefficient calculation)
+! solution_method     (1:   Euler's method)
+! link_bottom_drag    (T/F: include/exclude variable effect on TFV bottom drag)
+! link_surface_drag   (T/F: include/exclude variable effect on TFV surface drag)
+! link_water_density  (T/F: include/exclude aed variables impacting TFV density)
+! link_water_clarity  (T/F: include/exclude variable effects on TFV light extc)
+! ext_tss_extinction  (T/F: include/exclude TFV SS concs on PAR extinction)
+! base_par_extinction (Kw:  background light attenuation coefficient /m)
 !
+!-------------------------------------------------------------------------------
 &aed2_bio
-   solution_method = 1
-   link_bottom_drag = .false.
-   link_surface_drag = .false.
-   link_water_density = .false.
-   link_water_clarity = .true.
-   base_par_extinction = 0.4
-   ext_tss_extinction = .false.
-   do_limiter = .true.
+   !-- AED2 configuration flags
+     solution_method = 1
+     do_limiter = .true.
+     display_minmax = .false. !.true.
+   ! do_2d_atm_flux = .true.
+   ! do_particle_bgc = .false.
+   ! do_zone_averaging =
+     glob_min = -1e38
+     glob_max = 1e38
+     min_water_depth =0.0401
+     n_equil_substep = 12
+   !-- Linkages with host model: PHYSICS
+     link_bottom_drag = .false.
+     link_surface_drag = .false.
+     link_water_density = .false.
+   !-- Linkages with host model: LIGHT
+     link_ext_par = .false.
+     link_water_clarity = .false.
+     base_par_extinction = 0.4 !0.2
+     ext_tss_extinction = .false.
+     tss_par_extinction = 0.02
+   !-- Linkages with host model: RIPARIAN
+     link_solar_shade = .false.
+     link_rain_loss = .false.
+   !-- Benthic variable initialisation
+     init_values_file = ''
+     !route_table_file = '../External/AED2/Routing_Tbl.csv'
 /
 
-!-------------------------------------------------------------------------------
-! aed2_nml
+
+!###############################################################################
+! aed2_models  :  List of AED2 modules to be simulated
 !-------------------------------------------------------------------------------
 !
 ! List here the available aed2 modules to be included in the simulation.
-! It is important they are listed in the correct order so dependecicies can be
+! It is important they are listed in the correct order so dependencies can be
 ! set during the model set-up phase.
 !
 ! For further detail about available AED modules visit:
@@ -34,24 +83,39 @@
 !
 !-------------------------------------------------------------------------------
 &aed2_models
-    models = !'aed2_sedflux',
-              'aed2_tracer',
-              'aed2_oxygen',
-             !'aed2_carbon',
-              'aed2_silica',
-              'aed2_nitrogen',
-              'aed2_phosphorus',
-              'aed2_organic_matter',
-              'aed2_phytoplankton',
-             !'aed2_zooplankton',
-             !'aed2_geochemistry',
-             !'aed2_seddiagenesis',
-			 !'aed2_macrophyte',
-	         'aed2_totals'
+    models =
+       !-->  NUTRIENT/CHEMISTRY modules  <--!
+        !off 'aed2_sedflux',
+		!off 'aed2_macrophyte',
+             'aed2_tracer',
+             'aed2_oxygen',
+        !off 'aed2_carbon',
+             'aed2_silica',
+             'aed2_nitrogen',
+             'aed2_phosphorus',
+             'aed2_organic_matter',
+        !off 'aed2_seddiagenesis',
+       !-->  BIOLOGY modules  <--!
+             'aed2_phytoplankton',
+        !off 'aed2_macroalgae',
+        !off 'aed2_zooplankton',
+        !off 'aed2_bivalve',
+        !off 'aed2_pathogens',
+       !-->  RIPARIAN modules  <--!
+        !off 'aed2_geochemistry',
+        !off 'aed2_land',
+        !off 'aed2_soilbgc',
+        !off 'aed2_vegetation',
+        !off 'aed2_ass',
+       !-->  SUMMARY modules  <--!
+             'aed2_totals',
+        !off 'aed2_habitat'
 /
 
+
 !###############################################################################
-! aed2_sedflux
+! SDF: aed2_sedflux
+!-------------------------------------------------------------------------------
 !  sediment flux model types :
 !       "Constant" = sedimentation fluxes are constant values.
 !       "Constant2d" = Sedimentation fluxes may be different for
@@ -63,13 +127,7 @@
 !                                different benthic cells at different times
 !                                        - computed by model
 !-------------------------------------------------------------------------------
-&aed2_sedflux
-  !sedflux_model = 'Constant'
-   sedflux_model = 'Spatially Variable'
-/
-
-!###############################################################################
-! aed2_sed_<model>
+! aed2_sed_<model>     (<model> => _constant or _const2d )
 !  Fsed_oxy  = Sedimentation flux for oxygen
 !  Fsed_rsi  = Sedimentation flux for silica
 !  Fsed_amm  = Sedimentation flux for ammonia
@@ -85,22 +143,27 @@
 !  Fsed_ch4  = Sedimentation flux for methane
 !  Fsed_feii = Sedimentation flux for iron
 !-------------------------------------------------------------------------------
+&aed2_sedflux
+  !sedflux_model = 'Constant'
+   sedflux_model = 'Spatially Variable'
+/
 &aed2_sed_constant
-   Fsed_oxy = -50.0
-   Fsed_rsi = -9999
-   Fsed_amm = -9999
-   Fsed_nit = -9999
-   Fsed_frp = -9999
-   Fsed_pon = -9999
-   Fsed_don = -9999
-   Fsed_pop = -9999
-   Fsed_dop = -9999
-   Fsed_poc = -9999
-   Fsed_doc = -9999
-   Fsed_dic = -9999
+   Fsed_oxy =   -30.0
+   Fsed_rsi =     0.0
+   Fsed_amm =     0.0
+   Fsed_nit =     0.0
+   Fsed_frp =     0.0
+   Fsed_pon =     0.0
+   Fsed_don =     0.0
+   Fsed_pop =     0.0
+   Fsed_dop =     0.0
+   Fsed_poc =     0.0
+   Fsed_doc =     0.0
+   Fsed_dic =     0.0
 /
 &aed2_sed_const2d
    n_zones = 3
+   !-- disable these being allocated by using "-1e10"
    Fsed_oxy = -35.0,-50.0,-80.0
    Fsed_rsi = -1e10,-1e10,-1e10
    Fsed_amm = -1e10,-1e10,-1e10
@@ -115,63 +178,91 @@
    Fsed_dic = -1e10,-1e10,-1e10
 /
 
-!-------------------------------------------------------------------------------
+
 !###############################################################################
-! aed2_tracer
-!   num_tracers = number of tracers to model
-!   decay       = list of decay rates for the tracers
-!   settling    = list of settling rates for the tracers
-!   fsed        = list of sedimentation fluxes for the tracers
+! MAC: aed2_macrophyte
 !-------------------------------------------------------------------------------
-&aed2_tracer
-   retention_time = .true.
-   num_tracers = 2
-   decay = 0,0               !, 0, 0, ...
-   settling = -0.03,-0.001  !, 0, 0, ....
-   fsed = 0,0               !, 0, 0, ...
-   Ke_ss = 0.06,0.063       !, 0.02, 0.02
-   resuspension = 0.
-   !epsilon = 0.02   !, 0.02, 0.02
-   !tau_0 = 0.01     !, 0.01, 0.01
-   !tau_r = 1.0      !, 1.0, 1.0
+!
+! The MAC module can be used to include benthic plants (not macroalgae) in
+! a simulation. Plants can be configured to be present in specific sediment
+! zones, and may be assumed to be static or dynamic. Growth parameters are read
+! in from the dbase file, which includes values for a range of typical
+! freshwater, estuarine and marine species.
+!
+! For details on the variable & parameter options visit:
+!      http://aed.see.uwa.edu.au/research/models/AED/aed_macrophyte.html
+!-------------------------------------------------------------------------------
+&aed2_macrophyte
+   num_mphy = 1
+   the_mphy = 3
+   n_zones  = 4
+   active_zones = 2,3,4,5
+   simStaticBiomass  = .true.
+   simMacFeedback    = .false.
+   dbase = '../External/AED2/aed2_macrophyte_pars.nml'
 /
 
-!-------------------------------------------------------------------------------
+
 !###############################################################################
-! aed2_oxygen - AED oxygen model
+! TRC: aed2_tracer
 !-------------------------------------------------------------------------------
-! oxy_initial   [float, unit = mmol/m^3]
-!                 initial O2 concentration (can be overwritten by GLM or TFV IC)
-! Fsed_oxy      [float, unit = mmol/m^2/day]
-!                 sediment oxygen demand (unused if Fsed_oxy_variable is active)
-! Ksed_oxy      [float, unit = mmol/m^3]
-!                 half-saturation concentration of oxygen sediment flux
-! theta_sed_oxy [float, unit = - ]
-!                 Arrhenius temperature multiplier for sediment oxygen flux
-!  Fsed_oxy_variable = Oxygen sedimentation variable link
-!                         eg 'aed_sedflux_Fsed_oxy' will use the value supplied
-!                          by the aed_sedflux model for Fsed_oxy
 !
-! NOTE: Processes such as photosynthesis and bacterial respiration from other
-!       AED modules should be configured to use the following names:
-!        aed_oxygen_oxy
+! The TRC module can be used to simulate dissolved or particulate tracers, and
+! retention time. Dissolved variables can be configured to decay or have a
+! sediment flux, and particulate variables can be configured to be subject to
+! sedimentation and resuspension.
 !
-! DIAGNOSTICS:
+! For details on the variable & parameter options visit:
+!      http://aed.see.uwa.edu.au/research/models/AED/aed_tracer.html
+!-------------------------------------------------------------------------------
+&aed2_tracer
+   !-- Optional retention time tracer
+    retention_time = .true.
+   !-- Select number of tracers/ss's and their decay/sedflux/light properties
+    num_tracers = 2
+    decay       = 0,    0
+    Fsed        = 0,    0
+    Ke_ss       = 0.06, 0.063
+   !-- Configure sediment resuspension
+    settling    = 1
+    w_ss        = -0.03
+    d_ss        = 4e-6,   1e-5
+    rho_ss      = 1.5e3, 1.8e3
+   !-- Configure sediment resuspension
+    resuspension = 0
+    fs          = 0.7
+    epsilon     = 0.0250
+    tau_0       = 0.03
+    tau_r       = 1.0
+    Ktau_0      = 0.001
+    macrophyte_link_var = ''
+/
+
+
+!###############################################################################
+! OXY: aed2_oxygen
+!-------------------------------------------------------------------------------
 !
+! The OXY module is used to simulate dissolved oxygen, and includes terms for
+! atmospheric exchange and sediment oxygen consumption. Other modules can
+! link to the OXY_oxy to more fully resolve the oxygen budget.
+!
+! For details on the variable & parameter options visit:
+!      http://aed.see.uwa.edu.au/research/models/AED/aed_oxygen.html
 !-------------------------------------------------------------------------------
 &aed2_oxygen
    oxy_initial = 225.0
-   Fsed_oxy = -50.0     
+   Fsed_oxy = -50.0
    Ksed_oxy = 100.0
    theta_sed_oxy = 1.08
- ! Fsed_oxy_variable = 'SDF_Fsed_oxy'
+!  Fsed_oxy_variable = 'SDF_Fsed_oxy'
    oxy_min = 0
-   oxy_max = 500 
+   oxy_max = 500
 /
 
-!-------------------------------------------------------------------------------
+
 !###############################################################################
-! aed_carbon - AED carbon model
+! CAR: aed2_carbon
 !-------------------------------------------------------------------------------
 ! dic_initial   [float, unit = mmol/m^3]
 !                 initial DIC concentration (can be overwritten by GLM or TFV IC)
@@ -217,12 +308,12 @@
 &aed2_carbon
    !-- DIC and pH
    dic_initial = 1600.5
-   Fsed_dic = 3.0
+   Fsed_dic = 14.0
    Ksed_dic = 20.0
    theta_sed_dic = 1.08
-   Fsed_dic_variable='Fsed_dic'
+   !Fsed_dic_variable='Fsed_dic'
    pH_initial = 7.5
-   atmco2 = 370e-6
+   atmco2 = 390e-6
    ionic = 0.1
    !-- CH4
    ch4_initial = 27.6
@@ -236,9 +327,10 @@
   !Fsed_ch4_variable='Fsed_ch4'
 /
 
-!-------------------------------------------------------------------------------
+
 !###############################################################################
-! aed2_silica
+! SIL: aed2_silica
+!-------------------------------------------------------------------------------
 !  rsi_initial              = Initial silica value
 !  Fsed_rsi                 = Sediment flux for silica
 !  Ksed_rsi                 = Release rate for silica
@@ -255,9 +347,9 @@
   !Fsed_rsi_variable = 'SDF_Fsed_rsi'
 /
 
-!-------------------------------------------------------------------------------
+
 !###############################################################################
-! aed2_nitrogen - AED nitrogen model
+! NIT: aed2_nitrogen - AED nitrogen model
 !-------------------------------------------------------------------------------
 ! amm_initial   [float, unit = mmol/m^3]
 !                 initial NH4 concentration (can be overwritten by GLM or TFV IC)
@@ -302,29 +394,43 @@
 !
 !-------------------------------------------------------------------------------
 &aed2_nitrogen
-   amm_initial = 12.7, !average for 08-Sep-2009
-   nit_initial = 23.5, !average for 08-Sep-2009
-   Rnitrif = 0.1,
-   Rdenit = 0.26,      !from WC denit rates
-   Fsed_amm = 3.5,     !maximum measured by Keryn #BB
-   Fsed_nit = -4.5,    !maximum measured by Keryn
-   Knitrif = 78.1,
-   Kdenit = 2.0,
-   Ksed_amm = 25.0,
-   Ksed_nit = 100.0,
+   ! Initial values
+   amm_initial = 12.7
+   nit_initial = 23.5
+   n2o_initial = 23.5
+   ! Reaction rates of core pathways
+   Rnitrif = 0.1
+   Knitrif = 78.1
    theta_nitrif = 1.08,
+   nitrif_reactant_variable='OXY_oxy',
+   Rdenit = 0.26,
+   Kdenit = 2.0,
    theta_denit = 1.08,
+   Ranammox = 0.001,
+   Kanmx_nit = 2.0,
+   Kanmx_amm = 2.0,
+   Rdnra = 0.01,
+   Kdnra_oxy = 2.0,
+   ! N2O option reaction rates
+   simN2O = .false.
+   Rn2o = 0.05,
+   Cn2o_atm = 0.32  ! ppm
+   !-- Sediment fluxes
+   Fsed_amm = 3.5,
+   Ksed_amm = 25.0,
+   Fsed_nit = -4.5,
+   Ksed_nit = 100.0,
+   Fsed_n2o = -4.5,
+   Ksed_n2o = 100.0,
    theta_sed_amm = 1.08,
    theta_sed_nit = 1.08,
-   nitrif_reactant_variable='OXY_oxy',   
-   denit_product_variable='', !'N20',
-  !Fsed_amm_variable='Fsed_amm'
-  !Fsed_nit_variable='Fsed_nit'
+   !Fsed_amm_variable='SDF_Fsed_amm'
+   !Fsed_nit_variable='SDF_Fsed_nit'
 /
 
-!-------------------------------------------------------------------------------
+
 !###############################################################################
-! aed2_phosphorus - AED phosphorus model
+! PHO: aed2_phosphorus - AED phosphorus model
 !-------------------------------------------------------------------------------
 ! frp_initial   [float, unit = mmol/m^3]
 !                 initial PO4 concentration (can be overwritten by GLM or TFV IC)
@@ -366,11 +472,11 @@
 !-------------------------------------------------------------------------------
 &aed2_phosphorus
    frp_initial = 0.29
-   Fsed_frp = 0.2 ! #BB
+   Fsed_frp = 0.2
    Ksed_frp = 50.0
    theta_sed_frp = 1.10
    phosphorus_reactant_variable ='OXY_oxy'
-  !Fsed_frp_variable ='Fsed_frp'
+   !Fsed_frp_variable ='SDF_Fsed_frp'
    simPO4Adsorption = .true.
    ads_use_external_tss = .false.
    po4sorption_target_variable ='TRC_ss1'
@@ -379,12 +485,12 @@
    ads_use_pH = .false.
    Kadsratio= 1.0
    Qmax = 1.0
-   w_po4ads = -0.01   ! doesnt seem to work
+   w_po4ads = -0.01 ! doesnt seem to work in older version
 /
 
-!-------------------------------------------------------------------------------
+
 !###############################################################################
-! aed2_organic_matter - AED organic matter model
+! OGM: aed2_organic_matter - AED organic matter model
 !-------------------------------------------------------------------------------
 ! pom_initial     [float, unit = mmol/m^3]
 !                   initial PON conc (can be overwritten by GLM or TFV IC)
@@ -434,314 +540,81 @@
 !
 !-------------------------------------------------------------------------------
 &aed2_organic_matter
-    !-- ORGANIC CARBON
-   poc_initial = 78.5, !average for 08-Sep-2009
-   doc_initial = 39.9, !average for 08-Sep-2009
-   w_poc = -0.06,
-   Rpoc_miner = 0.05,
-   Rdoc_miner = 0.001,
-   Fsed_poc = 0.0,
-   Fsed_doc = 0.0,
-   Kpoc_miner = 31.25,
-   Kdoc_miner = 31.25,
-   Ksed_doc = 4.5,
-   theta_poc_miner = 1.08,
-   theta_doc_miner = 1.08,
-   theta_sed_doc = 1.08,
-   KeDOM       = 0.000005
-   KePOM       = 0.00096
-   doc_miner_reactant_variable='OXY_oxy',   
-   doc_miner_product_variable='',
-   !-- ORGANIC NITROGEN
-   pon_initial = 8.3, !average for 08-Sep-2009
-   don_initial = 1.3, !average for 08-Sep-2009
-   w_pon = -0.06,
-   Rpon_miner = 0.05,
-   Rdon_miner = 0.005,
-   Fsed_pon = 0.0,
-   Fsed_don = 0.00,
-   Kpon_miner = 31.25,
-   Kdon_miner = 31.25,
-   Ksed_don = 4.5,
-   theta_pon_miner = 1.08,
-   theta_don_miner = 1.08,
-   theta_sed_don = 1.08,
-   don_miner_product_variable='NIT_amm',
-   !-- ORGANIC PHOSPHORUS
-   pop_initial = 8.3,
-   dop_initial = 1.5,
-   w_pop = -0.06,
-   Rpop_miner = 0.05,
-   Rdop_miner = 0.001,
-   Fsed_pop = 0.00,
-   Fsed_dop = 0.0,
-   Kpop_miner = 31.25,
-   Kdop_miner = 31.25,
-   Ksed_dop = 4.5,
-   theta_pop_miner = 1.08,
-   theta_dop_miner = 1.08,
-   theta_sed_dop = 1.08,
-   !pop_miner_reactant_variable='',   
-   dop_miner_product_variable='',
-!  Fsed_pon_variable='Fsed_pon'
-!  Fsed_don_variable='Fsed_don'
-!  Fsed_pop_variable='Fsed_pop'
-!  Fsed_dop_variable='Fsed_dop'
-!  Fsed_poc_variable='Fsed_poc'
-!  Fsed_doc_variable='Fsed_doc'
-   !-- REFRACTORY ORGANIC MATTER
-   simRPools    = .true.
-   docr_initial = 350.00
-   donr_initial = 13.0
-   dopr_initial = 3.0
-   cpom_initial = 100.00
-   Rdocr_miner  = 0.00
-   Rdonr_miner  = 0.00
-   Rdopr_miner  = 0.00
-   Rcpom_bdown  = 0.00
-   w_cpom       = -0.01 ! -0.01
-   X_cpom_n     = 0.005
-   X_cpom_p     = 0.0001
-   KeDOMR       = 0.10000    ! = 1 (assuming KeDOMR is applied to CDOM in /m)
-   KeCPOM       = 0.00096    ! = 0.08 (/m)/(mg/L)  /83.3  (mmol/m3)/(mg/L)
-   extra_diag   = .true.
-   simphotolysis = .true. 
-   photo_c = 0.75
-/
-
-
-!-------------------------------------------------------------------------------
-!###############################################################################
-! aed2_phytoplankton - AED phytoplankton model
-!-------------------------------------------------------------------------------
-! num_phytos      [integer]
-!                   number of phytoplankton groups within this module to include
-! num_phytos      [integer]
-!                   list of ID's of groups in aed_phyto_pars.nml (len=num_phyto)
-! X_excretion_target_variable  [string]
-!                   state variable to receive C, N or P from excretion
-! X_mortality_target_variable  [string]
-!                   state variable to receive C, N or P from mortality
-! X_uptake_target_variable  [string]
-!                   state variable to be linked for C,N,P,Si or O2 uptake
-!
-! NOTE: Users must supply a valid "aed_phyto_pars.nml" file
-!
-!
-! NOTE: Processes such as zoop grazing or turbidity calc within any other
-!       AED modules should be configured to use the following names:
-!        aed_phytoplankton_name        (where name is as defined in the nml)
-!        aed_phytoplankton_name_IN     (internal nitrogen)
-!        aed_phytoplankton_name_IP     (internal phosphorus)
-!
-! DIAGNOSTICS:
-!        aed_phytoplankton_name_fI     (light limitation)
-!        aed_phytoplankton_name_fT     (temp limitation)
-!        aed_phytoplankton_name_fS     (salinity limitation)
-!        aed_phytoplankton_name_fN     (nitrogen limitation)
-!        aed_phytoplankton_name_fP     (phosphorus limitation)
-!        aed_phytoplankton_name_fSi    (silica limitation)
-!        aed_phytoplankton_tchla       (total module chlorophyll-a)
-!        aed_phytoplankton_gpp         (total module gross primary productivity)
-!
-!-------------------------------------------------------------------------------
-&aed2_phytoplankton
-   num_phytos = 5
-   the_phytos = 1,2,3,4,5
-   p_excretion_target_variable='OGM_dop'
-   n_excretion_target_variable='OGM_don'
-   c_excretion_target_variable='OGM_doc'
-   si_excretion_target_variable=''
-   p_mortality_target_variable='OGM_pop'
-   n_mortality_target_variable='OGM_pon'
-   c_mortality_target_variable='OGM_poc'
-   si_mortality_target_variable=''
-   p1_uptake_target_variable='PHS_frp'
-   n1_uptake_target_variable='NIT_nit'
-   n2_uptake_target_variable='NIT_amm'
-   si_uptake_target_variable='SIL_rsi'
-   do_uptake_target_variable='OXY_oxy'
-   c_uptake_target_variable=''
-   extra_debug = .true.
-   dbase = '../External/AED2/aed2_phyto_pars_008.nml'
-/
-
-!-------------------------------------------------------------------------------
-!###############################################################################
-! aed2_zooplankton - AED zooplankton model
-!-------------------------------------------------------------------------------
-! num_zoops      [integer]
-!                   number of zooplankton groups within this module to include
-! the_zoops      [integer]
-!                   list of ID's of groups in aed_zoop_pars.nml (len=num_zoops)
-! dX_target_variable  [string]
-!                   state variable linked to provide/receive dissoved OM
-! pX_target_variable  [string]
-!                   state variable linked to provide/receive particulate OM
-!
-! NOTE: Users must supply a valid "aed_zoops_pars.nml" file
-!
-!
-! NOTE: Processes such as zoop grazing or turbidity calc within any other
-!       AED modules should be configured to use the following names:
-!        aed_zooplankton_name        (where name is as defined in the nml)
-!
-! DIAGNOSTICS:
-!       -
-!
-!-------------------------------------------------------------------------------
-&aed2_zooplankton
-   num_zoops = 1
-   the_zoops = 1
-   dn_target_variable='OGM_don'  ! dissolved nitrogen target variable
-   pn_target_variable='OGM_pon'  ! particulate nitrogen target variable
-   dp_target_variable='OGM_dop'  ! dissolved phosphorus target variable
-   pp_target_variable='OGM_pop'  ! particulate phosphorus target variable
-   dc_target_variable='OGM_doc'  ! dissolved carbon target variable
-   pc_target_variable='OGM_poc'  ! particulate carbon target variable
+   !-- Initial concentrations for OM variables (mmol/m3)
+          poc_initial  = 78.5
+          doc_initial  = 39.9
+          pon_initial  = 8.3
+          don_initial  = 1.3
+          pop_initial  = 8.3
+          dop_initial  = 1.5
+          docr_initial = 350.00
+          donr_initial = 13.0
+          dopr_initial = 3.0
+          cpom_initial = 100.00
+   !-- Breakdown and mineralisation (basic pool)
+          Rpoc_hydrol  = 0.05
+          Rdoc_minerl  = 0.001
+          Rpon_hydrol  = 0.05
+          Rdon_minerl  = 0.005
+          Rpop_hydrol  = 0.05
+          Rdop_minerl  = 0.001
+          theta_hydrol = 1.08
+          theta_minerl = 1.08
+          Kpom_hydrol  = 31.25
+          Kdom_minerl  = 31.25
+          doc_miner_reactant_variable='OXY_oxy'
+          doc_miner_product_variable=''
+          don_miner_product_variable='NIT_amm'
+          dop_miner_product_variable='PHS_frp'
+          !-- Refractory organic matter (optional)
+          simRPools    = .true.
+          Rdocr_miner  = 0.0001
+          Rdonr_miner  = 0.0001
+          Rdopr_miner  = 0.0001
+          Rcpom_bdown  = 0.0001
+          X_cpom_n     = 0.0005
+          X_cpom_p     = 0.0001
+          !-- Light related parameters
+          KeDOM        = 0.000005
+          KePOM        = 0.00096
+          KeDOMR       = 0.10000    ! = 1 (assuming KeDOMR is applied to CDOM in /m)
+          KeCPOM       = 0.00096    ! = 0.08 (/m)/(mg/L)  /83.3  (mmol/m3)/(mg/L)
+          simphotolysis = .false. !.true.
+          !photo_fmin
+          photo_c      = 0.75
+          !-- Particle settling parameters
+          settling     = 3
+          w_pom        = -0.06
+          d_pom        = 2e-6
+          rho_pom      = 1.12e3
+          w_cpom       = -0.01
+          d_cpom       = 1e-5
+          rho_cpom     = 1.3e3
+          !-- Sediment interaction parameters (basic model)
+          resuspension = 0
+          resus_link   = 'TRC_resus'
+          sedimentOMfrac = 0.5
+          Xsc = 0.5
+          Xsn = 0.05
+          Xsp = 0.005
+          Fsed_doc = 2.0
+          Fsed_don = 1.0
+          Fsed_dop = 0.020
+         !Fsed_doc_variable,
+         !Fsed_dop_variable,
+         !Fsed_don_variable,
+          Ksed_dom = 4.5
+          theta_sed_dom = 1.08
+          !-- Other options
+          extra_diag = .false. !.true.
+          !poc_min, poc_max, doc_min, doc_max
+          !pon_min, pon_max, don_min, don_max
+          !pop_min, pop_max, dop_min, dop_max
 /
 
 
 !###############################################################################
-! aed2_pathogens
-!  num_pathogens = number of pathogens to model
-!  the_pathogens = list of pathogens classes (referencing the pathogens database)
-!-------------------------------------------------------------------------------
-&aed2_pathogens
-   num_pathogens = 1
-   the_pathogens = 1 !,3,5
-   ! NEED UPDATED VARS HERE
-   num_ss = 0
-/
-!-------------------------------------------------------------------------------
-!###############################################################################
-! aed2_macrophyte - AED macrophyte model
-!-------------------------------------------------------------------------------
-&aed2_macrophyte
-   num_mphy = 1
-   the_mphy = 1
-   n_zones  = 1 ! This was 1 #BB
-   active_zones = 5
-   dbase = '../External/AED2/aed_mphy_pars.nml'
-/
-
-
-
-
-!###############################################################################
-! aed2_totals
-!  TN_vars      = list of variable contributing to total nitrogen
-!  TN_varscale  = scaling of TN variables contribution
-!  TP_vars      = list of variable contributing to total phosphorus
-!  TP_varscale  = scaling of TP variables contribution
-!  TOC_vars     = list of variable contributing to total organic carbon
-!  TOC_varscale = scaling of TOC variables contribution
-!  TSS_vars     = list of variable contributing to total suspended solids
-!  TSS_varscale = scaling of TSS variables contribution
-!                 <vector same length as TSS names>
-!-------------------------------------------------------------------------------
-&aed2_totals
-   outputLight  = .true.
-   TN_vars      =  'NIT_nit','NIT_amm','OGM_don','OGM_pon','OGM_donr','OGM_cpom','PHY_grn','PHY_bga','PHY_dino','PHY_crypt','PHY_diatom'
-   TN_varscale  =   1.0,      1.0,      1.0,       1.0,     1.0,       ,0.005     ,0.15     ,0.15     ,0.15       ,0.15       ,0.15
-   !TKN_vars     =  'NIT_amm','OGM_don','OGM_pon','OGM_donr','PHY_grn'
-   !TKN_varscale =   1.0,      1.0,       1.0,     1.0,       0.15
-   TP_vars =  'PHS_frp',
-              'PHS_frp_ads',
-              'OGM_dop',
-              'OGM_dopr',
-              'OGM_pop',
-              'OGM_cpom',
-              'PHY_grn',
-              'PHY_bga',
-              'PHY_dino',
-              'PHY_diatom',
-              'PHY_crypt'
-   TP_varscale = 1.0, 1.0, 1.0, 1.0, 1.0, 0.0001, 0.01, 0.01, 0.01, 0.01, 0.01
-   TOC_vars = 'OGM_doc',
-              'OGM_docr',
-              'OGM_poc',
-              'OGM_cpom',
-              'PHY_grn',
-              'PHY_bga',
-              'PHY_dino',
-              'PHY_diatom',
-              'PHY_crypt'
-   TOC_varscale = 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0
-   TSS_vars = 'TRC_ss1',
-              'TRC_ss2', 
-              'OGM_cpom',
-              'OGM_poc',
-              'PHY_grn',
-              'PHY_bga',
-              'PHY_dino',
-              'PHY_diatom',
-              'PHY_crypt'
-   TSS_varscale = 1.0, 1.0, 0.024, 0.024, 0.02, 0.02, 0.02, 0.02, 0.02
-   Turb_vars ='TRC_ss1',
-              'TRC_ss2', 
-              'OGM_cpom',
-              'OGM_poc',
-              'PHY_grn',
-              'PHY_bga',
-              'PHY_dino',
-              'PHY_diatom',
-              'PHY_crypt'
-   Turb_varscale = 0.33,0.30,0.001,0.001,0.001,0.001,0.001,0.001,0.001       
-  ! Table 4 in science plan, with OGM and PHY vars converted from mmolC to gC) ;
-/
-
-
-
-
-
-
-
-
-!-------------------------------------------------------------------------------
-! aed2_geochemistry
-!-------------------------------------------------------------------------------
-! speciation_dt     [integer]
-!                     number of timesteps between calculations
-! geochem_file      [string]
-!                     data file with thermodynamic info for speciation calculations
-! num_components    [integer]
-!                     number of dissolved 'components' to be considered
-! dis_components    [string]
-!                     list of component names (must match those in the geochem_file)
-! component_link    [string]
-!                     name of any active variabiles to be used as a component (if present, else '')
-! Fsed_gch          [float]
-!                     sediment flux rate of dissolved components (mol/m2/day)
-! num_mineral       [integer]
-!                     number of particulate mineral phases to be included
-! the_minerals      [string]
-!                     list of mineral names (must match those in the geochem_file)
-! mineral_link      [string]
-!                     name of any active variables to be used as a mineral (if present, else '')
-! w_gch             [float]
-!                     sedimentation rate of chosen particulate phases (m/day)
-!-------------------------------------------------------------------------------
-&aed2_geochemistry
-   speciation_dt  = 10
-   geochem_file   = 'aed2_geochem_pars.dat'
-   num_components = 5
-   dis_components = 'DIC','Ca','PO4','FeIII','FeII'
-   component_link = 'dic','','frp','',''
-   Fsed_gch       = 0.,0.,0.,0.,0.
- ! dis_initial    = 0.,2.,0.,0.2,0.
-   num_minerals   = 2
-   the_minerals   = 'Calcite', 'FeOH3A'
-   mineral_link   = '',''
-   w_gch          = 0.,0.
- ! min_initial    = 0.01,0.01 
- ! speciesOutput  = 'CO2'
-/
-
-
-
-! -----------------------------------------------------------------------------!
-!  AED Sediment Diagenesis model (CANDI-AED)
+! SDG: AED Sediment Diagenesis model (CANDI-AED)     ** Under Development **
 ! -----------------------------------------------------------------------------!
 !                                                                              !
 !-- Sediment Physical Properties                                               !
@@ -837,92 +710,573 @@
 ! diagenesis%OM_min,InMinDep ! : LI_I initialisation params                    !
 ! diagenesis%OutputUnits   !   : *.SED units: 0 = mM; 1 = mg/L                 !
 !                                                                              !
-!------------------------------------------------------------------------------!
+! -----------------------------------------------------------------------------!
+&aed2_sediment
+   sediment_model = 'DYNAMIC'
+/
+! -----------------------------------------------------------------------------!
 &aed2_sed_candi
-!-- Sediment Physical Properties --!
-   diagenesis%db0       =  1.00
-   diagenesis%imix      = 0
-   diagenesis%xs        =  3.00
-   diagenesis%x1        =  9.00
-   diagenesis%x2        = 10.00
-   diagenesis%irrg     =  0
-   diagenesis%alpha0    =  5.00
-   diagenesis%xirrig    =  3.00
-   diagenesis%ventflow  =  0.00
-   diagenesis%w00       =  0.1
-   diagenesis%p0        =  0.95
-   diagenesis%p00       =  0.71
-   diagenesis%bp        =  0.22
-   diagenesis%torteq    =  3
-   diagenesis%an        =  2.14
-   diagenesis%aa        =  3.79
-   diagenesis%ab        =  2.02
-   diagenesis%xl        = 100.00
-   diagenesis%maxnpts   = 40
-!-- Reaction Rates --!
-   diagenesis%docl2dic  = 1000
-   diagenesis%donl2din  = 1000
-   diagenesis%dopl2dip  = 1000
-   diagenesis%pocl2docl = 0.1
-   diagenesis%ponl2donl = 0.1
-   diagenesis%popl2dopl = 0.1
-   diagenesis%docr2docl = 1000
-   diagenesis%donr2donl = 1000
-   diagenesis%dopr2dopl = 1000
-   diagenesis%pocr2docr =  0.001
-   diagenesis%ponr2donr =  0.001
-   diagenesis%popr2dopr =  0.001
-   diagenesis%pocvr2docr=  0.00001
-   diagenesis%ponvr2donr=  0.00001
-   diagenesis%popvr2dopr=  0.00001
-   diagenesis%kNH4OX    =  2.00E+04
-   diagenesis%kTSNO3    =  1.00E+04
-   diagenesis%kTSOX     =  6.00E+05
-   diagenesis%kMnOX     =  2.00E+06
-   diagenesis%kMnNO3    =  1e+3
-   diagenesis%kFeOX     =  2.00E+06
-   diagenesis%kFeSOX    =  2.20E+04
-   diagenesis%kFeS2OX   =  1e+4
-   diagenesis%kMnAge    =  1e+2
-   diagenesis%kFeAge    =  1e+2
-   diagenesis%kFeNO3    =  1e+3
-   diagenesis%kFeSMn    =  1e+2
-   diagenesis%kFeSFe    =  1e+1
-   diagenesis%kFeSppt   =  4.0E+00
-   diagenesis%kTSFe     =  1.00E+01
-   diagenesis%kPyrite   =  9.00E+00
-   diagenesis%kMnFe     =  1.00E+03
-   diagenesis%kTSMn     =  1.00E+01
-   diagenesis%kCH4OX    =  1.00E+07
-   diagenesis%kCH4SO4   =  2.50E+01
-   diagenesis%kSidppt   =  0.007
-   diagenesis%kRodppt   =  0.005
-   diagenesis%kCalppt   =  0.0
-   diagenesis%k(p)O2    =  0.008
-   diagenesis%k(p)NO3   =  0.030
-   diagenesis%k(p)MnO2  =  10.0
-   diagenesis%k(p)FeOH  =  10.0
-   diagenesis%k(p)SO4   =  1.000
-   diagenesis%kNH4Ads   =  0.00
-   diagenesis%kPO4Ads   =  2.00
-   diagenesis%X         =  Zn
-   diagenesis%Xmk       = 0.06
-   diagenesis%Xfl       = 0.065
-   diagenesis%Xfm       = 0.0001
-   diagenesis%kXSppt    = 1.50E+02
-   diagenesis%rxn_mode  =  0
-!-- Initial & Boundary Conditions  --!
-   diagenesis%ibc2      =  3
-   diagenesis%ibbc      =  0
-   diagenesis%strtSteady =  0
-   diagenesis%fluxscale  =  1.0
-   diagenesis%POMVR      =  0.0210
-   diagenesis%InitSedDepth  = 100.0
-   diagenesis%OMInitMethodL = EX_I
-   diagenesis%OM_top    =  1.0
-   diagenesis%OM_cf     =  0.6
-   diagenesis%OMInitMethodR = LI_I
-   diagenesis%OM_min    =  0.9
-   diagenesis%InMinDep  = 99.
-   diagenesis%OutputUnits =  1
+    !-- time stuff
+    timeswitch   = 0         ! leave here
+    num_days     = 1         ! delete? might not use this any more
+    fluxon       = 5         ! leave here
+    fluxoff      = 15        ! leave here
+    substep      = 1         ! leave here       ! 1 means 1*15 minutes
+    driverDT     = 900       ! leave here       ! seconds: 900 seconds = 15 minutes, a usual tuflow timestep
+!--
+!   fracCPL                  ! delete?
+!   fracCPR                  ! delete?
+!   fracCPspecial            ! delete?
+!   fracNPL                  ! delete?
+!   fracNPR                  ! delete?
+!   fracNPspecial            ! delete?
+!   fracPPL                  ! delete?
+!   fracPPR                  ! delete?
+!   fracPPspecial            ! delete?
+!   fracOAc                  ! delete?
+!   fracH2                   ! delete?
+!   fracCDHyd                ! delete?
+!   fracNDHyd                ! delete?
+!   fracPDHyd                ! delete?
+!   fracCOAc                 ! delete?
+!   fracNOAc                 ! delete?
+!   fracPOAc                 ! delete?
+!   fracCH2                  ! delete?
+!   fracNH2                  ! delete?
+!   fracPH2                  ! delete?
+!--
+    SolidInitialUnit = mmolLsolid
+    geochem_file = "../External/AED2/aed2_geochem_pars.dat"
+!--
+    ibc2          = 2       ! --> csv                variables bw or flux are from default_vals or a file or a water_link
+    ibbc          = 1       ! --> csv                bottom sed layer might be porous or capped in different zones
+    startSteady   = 1       ! delete?                might not use this any more
+    flux_scale    = 1.0     ! delete?                IF (layer == 2) THEN     dfluxes = dfluxes * candi%BC%flux_scale
+    POMVR         = 0.3     ! leave here             is it %solids?
+    InitSedDepth  = 2.0e-10 ! delete?                did we get rid of this?
+    OMInitMethodL = CO_I    ! --> csv                we might want different OM profiles in different zones
+    OM_topL       = 1.0     ! delete?                might not use this any more
+    OM_minL       = 0.9     ! --> csv                we might want different OM profiles in different zones
+    OM_cfL        = 0.6     ! hide?                  Ain(i) = t_th*EXP(-candi%BC%OM_cfL*candi%rpar(i))
+    InitMinDepthL = 99.     ! delete?                did we get rid of this?
+    OMInitMethodR = EX_I    ! --> csv                we might want different OM profiles in different zones
+    OM_topR       = 1.0     ! delete?                might not use this any more
+    OM_minR       = 0.9     ! --> csv                we might want different OM profiles in different zones
+    OM_cfR        = 0.6     ! delete?                might not use this any more
+    InitMinDepthR = 99.     ! --> csv                we might want different OM profiles in different zones
+    InMinDep      = 99.     ! delete?                might not use this any more
+    OutputUnits   = 0       ! delete?                might not use this any more
+!--
+    ! zone stuff
+    nZones       = 2        !        leave here
+    active_zones    = 3,4   !        leave here
+    zone_pars    = '../External/AED2/aed2_candi_params.csv'
+    Bsolidswitch = 1        !        leave here      but move it out of the zones: it makes bacteria transported as a solute or a solid
+!--
+    ! var links etc
+!	N.B. The order of the variables is the order of the if you change the order of the variables, it will change the number of candi col and the order in which they are printed in swi_fluxes
+	!varnum,		1,           2,          3,          4,          5,          6,          7,          8,          9,              10,             11,             12,             13,             14,             15,             16,             17,             18,             19,             20,             21,             22,             23,             24,             25,             26,             27,             28,             29,             30,             31,             32,             33,             34,             35,             36,             37,             38,             39,             40,             41,             42,             43,             44,             45,             46,             47,             48,                  	 49,                   50,                   51,                    52,        	          53,                  54,                  55,                  56,                  57,                  58,                  59,                  60,                  61,             	   62,		   		63,		   		64
+	variables =		'mniv',		'oxy', 		'so4',		'frp',		'amm',		'ch4', 		'dic',		'h2s',		'pomspecial',	'pin', 			'docl',			'docr',	 		'donl',	 	 	'donr',	 		'dopl',	 		'dopr',	 		'pocl',	 		'pocr',			'ponl',			'ponr',	 		'popl',	 		'popr',	 		'chla',	 		'zoo', 			'poml',			'pomr',			'domr',			'dhyd',			'dfer',			'mnii',			'nit',			'mno2a',		'mno2b',		'mnco3',		'feii',			'feiii',        'feoh3a',		'feoh3b', 		'fes',			'fes2', 		'feco3',		'Feads',		'Mnads',		'ca', 			'caco3', 		'X',			'XS',			'pip',                	'POM1',               'POM2',               'POM3',               	'POM4',               'OAc',               'H2',                'N2',                'Necromass',         'BFer',              'BAer',              'BDen',              'BMan',              'BIro',              'BSul',         'BMet',         'proton'
+	default_vals =	12.20E-1,	231.0E+00,	3544.55E-1,	6.5563E-1,	4.2410E-10,  1.00E-09,	1.3360E+3,	1.00E-10,	1.00E+02,	     1.00E-5,		5169.3E-01,		221.6E-0,		440.00E-1,		18.00E-0,		2.2E-1,		    2.44E-1,	  14026.9280E-1,	6019.990E-1		687.790E-1,		290.026E-1		3.400E-0,		1.33E-0,	    0.06100E-1,		1.00E-10,		 777.200E+1,	200.7700E-0,	700.00E+4,		1.00E-03,		1.00E-10,		0.04E-00,		2.0E+0,		  	4.0E-01,		1.00E-10,		1.00E-10,		17.00E+0,		15.00E+0,		 120.00E-1,		1.00E-10,		7.90E-2,		1.00E-10,		1.00E-10,		1.00E-10,		1.00E-10,		375.0E+0,		371.00E-5,		1.00E-10,		1.00E-10,		1.00E-10,             	1.00E-01,             1.00E-10,             1.00E-10,             	1.00E-10,             1.00E-10,            1.00E-10,            1.00E-06,            1.00E-10,            1.23E-04,            4.56E-04,            7.89E-04,            0.12E-04,            3.45E-04,            6.78E-04,       9.01E-04,       2.34E-02
+	!flux unit		mmol/m3		mmol/m3		mmol/m3		mmol/m3		mmol/m3		mmol/m3		mmol/m3		mmol/m3		mmol/m2/year	mmol/m2/year	docl mmol/m3	docr mmol/m3	donl mmol/m3	donr mmol/m3	dopl mmol/m3	dopr mmol/m3	pocl mmol/m2/y pocr mmol/m2/y	ponl mmol/m2/y	ponr mmol/m2/y	popl mmol/m2/y	popr mmol/m2/y	chla mmol/m2/y	zoo mmol/m2/y	mmol/m2/year	mmol/m2/year	domr mmol/m3	dhyd mmol/m3	dfer mmol/m3	mnii mmol/m3	nit mmol/m3		mmol/m2/y		mno2b mmol/m2/y	mnco3 mmol/m2/y	feii mmol/m3	feiii mmol/m3	 mmol/m2/year	mmol/m2/year	mmol/m2/year	mmol/m2/year	mmol/m2/year	mmol/m3			mmol/m3			feii mmol/m3	mmol/m2/y		Zn mmol/m3		ZnS mmol/m2/y	mmol/m2/year	      	mmol/m2/year	    mmol/m2/year	 		 mmol/m2/year	        mmol/m2/year	      mmol/m3	           mmol/m3	       		 mmol/m3	         mmol/m2/year	 	 mmol/m2/year	       mmol/m2/year	    	mmol/m2/year		 mmol/m2/year	      mmol/m2/year		   mmol/m2/year	   mmol/m2/year	   mmol/m3
+	!																																																				poml			pomr																																															POM1																																									!
+	initial_vals =	12.20E-1,    231.0E+00,	98210.5E-1,	6.456E-1,	880.64E-10,  1.00E-09,	6.132E+3,	1.00E-10,	1.00E-10,	     1.00E-5,		5.3E-01,		22.6E-0,		4.00E-1,		1.80E-0,		4.2E-1,		    4.44E-1,      14026.9280E-2,	601.990E-1		68.790E-1,		29.026E-1		2.400E-0,		2.88E-0,	     0.06100E-1,	1.00E-10,		 555.200E+1,	150.7700E+0,	 1400.00E+10,	1.00E-03,		1.00E-10,		0.04E-00,		5.80E+0,		 40.0E+01,		1.00E-10,	     1.00E-10,		5.90E-1,	    36.00E+0,		 80.60E+0,		1.00E-10,		7.9E-1,		    6.40E-1,	   1.00E-10,		1.00E-10,		1.00E-10,		375.0E+0,		371.00E+3,		1.00E-10,		1.00E-10,		1.00E-10,             	1.00E-01,             1.00E-10,             1.00E-10,             	1.00E-10,             1.00E-10,            1.00E-10,            1.00E-06,            1.00E-10,            1.23E-04,            4.56E-04,            7.89E-04,            0.12E-04,            3.45E-04,            6.78E-04,       9.01E-04,       2.34E-02
+	!initial unit	mmol/m3		2.15E+02mmol/m3	mmol/m3	mmol/m3		mmol/m3		mmol/m3		mmol/m3		mmol/m3		mmol/m3			mmol/m3			mmol/m3			mmol/m3			mmol/m3			mmol/m3			mmol/m3			mmol/m3			mmol/m3			mmol/m3			mmol/m3			mmol/m3			mmol/m3			mmol/m3			mmol/m3			mmol/m3			  mmol/m3		mmol/m3			mmol/m3			mmol/m3			mmol/m3			mmol/m3			mmol/m3			 mmol/m3			mmol/m3		  mmol/m3		mmol/m3			mmol/m3			 75e1mmol/m3	mmol/m3			mmol/m3			mmol/m3			mmol/m3			mmol/m3			mmol/m3			mmol/m3			mmol/m3			mmol/m3			mmol/m3			mmol/m3		      		mmol/m3		    		mmol/m3		  		mmol/m3					mmol/m3			      mmol/m3			   mmol/m3				mmol/m3			     mmol/m3		  		mmol/m3	  	     	mmol/m3		  	  	mmol/m3		 		mmol/m3	      			mmol/m3		   		mmol/m3	   mmol/m36.00E+02  	mmol/m3
+  !
+	water_link =		'',		'OXY_oxy',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'' ,		'' ,		'',		'',		'',		'',		'',			'',			'',		'',			'',			'',			'',		'',		'',			'',			'',		'',			'',			'',			'',		'',		'', '', ''
+	diss_flux_link =	'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'' ,		'' ,		'',		'',		'',		'',		'',			'',			'',		'',			'',			'',			'',		'',		'',			'',			'',		'',			'',			'',			'',		'',		'', '', ''
+	part_sed_link =  	'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'',		'' ,		'' ,		'',		'',		'',		'',		'',			'',			'',		'',			'',			'',			'',		'',		'',			'',			'',		'',			'',			'',			'',		'',		'', '', ''
+	morevariables =     'FIN_O2',    'FTDenOAc'
+/
+
+
+!###############################################################################
+! PHY: aed2_phytoplankton - AED phytoplankton model
+!-------------------------------------------------------------------------------
+! num_phytos      [integer]
+!                   number of phytoplankton groups within this module to include
+! num_phytos      [integer]
+!                   list of ID's of groups in aed_phyto_pars.nml (len=num_phyto)
+! X_excretion_target_variable  [string]
+!                   state variable to receive C, N or P from excretion
+! X_mortality_target_variable  [string]
+!                   state variable to receive C, N or P from mortality
+! X_uptake_target_variable  [string]
+!                   state variable to be linked for C,N,P,Si or O2 uptake
+!
+! NOTE: Users must supply a valid "aed_phyto_pars.nml" file
+!
+!
+! NOTE: Processes such as zoop grazing or turbidity calc within any other
+!       AED modules should be configured to use the following names:
+!        aed_phytoplankton_name        (where name is as defined in the nml)
+!        aed_phytoplankton_name_IN     (internal nitrogen)
+!        aed_phytoplankton_name_IP     (internal phosphorus)
+!
+! DIAGNOSTICS:
+!        aed_phytoplankton_name_fI     (light limitation)
+!        aed_phytoplankton_name_fT     (temp limitation)
+!        aed_phytoplankton_name_fS     (salinity limitation)
+!        aed_phytoplankton_name_fN     (nitrogen limitation)
+!        aed_phytoplankton_name_fP     (phosphorus limitation)
+!        aed_phytoplankton_name_fSi    (silica limitation)
+!        aed_phytoplankton_tchla       (total module chlorophyll-a)
+!        aed_phytoplankton_gpp         (total module gross primary productivity)
+!
+!-------------------------------------------------------------------------------
+&aed2_phytoplankton
+!-- Configure phytoplankton groups to simulate
+  num_phytos = 5
+   the_phytos = 1,2,3,4,5
+  settling =   1
+!-- Benthic phytoplankton group (microphytobenthos)
+  do_mpb = 0 !BB
+  R_mpbg = 0.5
+  R_mpbr = 0.05
+  I_Kmpb = 100.
+  mpb_max = 2000.
+  resuspension = 0.45
+  resus_link   = ''
+  n_zones = 1
+  active_zones = 5
+!-- Set link variables to other modules
+  p_excretion_target_variable='OGM_dop'
+  n_excretion_target_variable='OGM_don'
+  c_excretion_target_variable='OGM_doc'
+  si_excretion_target_variable=''
+  p_mortality_target_variable='OGM_pop'
+  n_mortality_target_variable='OGM_pon'
+  c_mortality_target_variable='OGM_poc'
+  si_mortality_target_variable=''
+  p1_uptake_target_variable='PHS_frp'
+  n1_uptake_target_variable='NIT_nit'
+  n2_uptake_target_variable='NIT_amm'
+  si_uptake_target_variable='SIL_rsi'
+  do_uptake_target_variable='OXY_oxy'
+  c_uptake_target_variable=''
+!-- General options
+  dbase = '../External/AED2/aed2_phyto_pars_008.nml'
+  extra_diag = .true.
+ !zerolimitfudgefactor = ??
+  min_rho = 900.
+  max_rho = 1200.
+/
+
+
+!###############################################################################
+! MAG: aed2_macroalgae - AED macroalgae model
+!-------------------------------------------------------------------------------
+&aed2_macroalgae
+   num_malgae = 1
+   the_malgae = 1
+   settling =   5
+   slough_stress = 0.5
+   n_zones = 5
+   active_zones = 1,2,3,4,5
+   p_excretion_target_variable='OGM_dop'
+   n_excretion_target_variable='OGM_don'
+   c_excretion_target_variable='OGM_doc'
+   si_excretion_target_variable='SIL_rsi'
+   p_mortality_target_variable='OGM_pop'
+   n_mortality_target_variable='OGM_pon'
+   c_mortality_target_variable='OGM_poc'
+   si_mortality_target_variable=''
+   p1_uptake_target_variable='PHS_frp'
+   n1_uptake_target_variable='NIT_nit'
+   n2_uptake_target_variable='NIT_amm'
+   si_uptake_target_variable='SIL_rsi'
+   do_uptake_target_variable='OXY_oxy'
+   c_uptake_target_variable=''
+   simMalgHSI = 1
+   extra_debug = .true.
+   dbase = '../External/AED2/aed2_malgae_pars.nml'
+/
+
+
+!###############################################################################
+! ZOO: aed2_zooplankton - AED zooplankton model
+!-------------------------------------------------------------------------------
+! num_zoops      [integer]
+!                   number of zooplankton groups within this module to include
+! the_zoops      [integer]
+!                   list of ID's of groups in aed_zoop_pars.nml (len=num_zoops)
+! dX_target_variable  [string]
+!                   state variable linked to provide/receive dissoved OM
+! pX_target_variable  [string]
+!                   state variable linked to provide/receive particulate OM
+!
+! NOTE: Users must supply a valid "aed_zoops_pars.nml" file
+!
+!
+! NOTE: Processes such as zoop grazing or turbidity calc within any other
+!       AED modules should be configured to use the following names:
+!        aed_zooplankton_name        (where name is as defined in the nml)
+!
+! DIAGNOSTICS:
+!       -
+!
+!-------------------------------------------------------------------------------
+&aed2_zooplankton
+   num_zoops = 1
+   the_zoops = 1
+   dn_target_variable=''  ! dissolved nitrogen target variable
+   pn_target_variable=''  ! particulate nitrogen target variable
+   dp_target_variable=''  ! dissolved phosphorus target variable
+   pp_target_variable=''  ! particulate phosphorus target variable
+   dc_target_variable=''  ! dissolved carbon target variable
+   pc_target_variable=''  ! particulate carbon target variable
+   dbase = '../External/AED2/aed2_zoop_pars.nml'
+   simZoopFeedback = .false.
+/
+
+
+!###############################################################################
+! BIV: aed2_bivalve - AED bivalve model
+!-------------------------------------------------------------------------------
+! num_biv      [integer]
+!                   number of zooplankton groups within this module to include
+! the_biv      [integer]
+!                   list of ID's of groups in aed_zoop_pars.nml (len=num_zoops)
+! dX_target_variable  [string]
+!                   state variable linked to provide/receive dissoved OM
+! pX_target_variable  [string]
+!                   state variable linked to provide/receive particulate OM
+!
+! NOTE: Users must supply a valid "aed_bivalve_pars.nml" file
+!
+! NOTE: Processes such as grazing or turbidity calc within any other
+!       AED modules should be configured to use the following names:
+!        BIV_name        (where name is as defined in the nml)
+!
+! DIAGNOSTICS:
+!
+!-------------------------------------------------------------------------------
+&aed2_bivalve
+   num_biv = 2
+   the_biv = 1,2
+   !
+   dn_target_variable=''  ! dissolved nitrogen target variable
+   pn_target_variable=''  ! particulate nitrogen target variable
+   dp_target_variable=''  ! dissolved phosphorus target variable
+   pp_target_variable=''  ! particulate phosphorus target variable
+   dc_target_variable=''  ! dissolved carbon target variable
+   pc_target_variable=''  ! particulate carbon target variable
+   do_uptake_variable='OXY_oxy'  ! oxygen uptake variable
+   ss_uptake_variable=''  ! oxygen uptake variable
+   !FIX FROM ERIE!
+   !n_zones, active_zones, extra_diag,&
+   !simBivTracer, simBivFeedback, simStaticBiomass,            &
+   !dbase, simFixedEnv, fixed_temp, fixed_sal, fixed_oxy, fixed_food, & initFromDensity
+
+/
+
+
+!###############################################################################
+! PTH: aed2_pathogens
+!-------------------------------------------------------------------------------
+!  num_pathogens = number of pathogens to model
+!  the_pathogens = list of pathogens classes (referencing the pathogens database)
+!-------------------------------------------------------------------------------
+&aed2_pathogens
+   num_pathogens = 1
+   the_pathogens = 1 !,3,5
+   ! NEED UPDATED VARS HERE
+   num_ss = 0
+/
+
+
+!###############################################################################
+! GEO: aed2_geochemistry
+!-------------------------------------------------------------------------------
+! speciation_dt     [integer]
+!                     number of timesteps between calculations
+! geochem_file      [string]
+!                     data file with thermodynamic info for speciation calculations
+! num_components    [integer]
+!                     number of dissolved 'components' to be considered
+! dis_components    [string]
+!                     list of component names (must match those in the geochem_file)
+! component_link    [string]
+!                     name of any active variabiles to be used as a component (if present, else '')
+! Fsed_gch          [float]
+!                     sediment flux rate of dissolved components (mol/m2/day)
+! num_mineral       [integer]
+!                     number of particulate mineral phases to be included
+! the_minerals      [string]
+!                     list of mineral names (must match those in the geochem_file)
+! mineral_link      [string]
+!                     name of any active variables to be used as a mineral (if present, else '')
+! w_gch             [float]
+!                     sedimentation rate of chosen particulate phases (m/day)
+!-------------------------------------------------------------------------------
+&aed2_geochemistry
+   geochem_file   = '../External/AED2/aed2_geochem_pars.dat'
+   !-- dissolved components
+     num_components = 10
+     dis_components = 'DIC', 'FeII', 'FeIII' ,'Al', 'Cl', 'SO4', 'Na', 'K', 'Mg', 'Ca','H2S'
+     component_link = 'CAR_dic','','','','','','','','','','','',''
+     Fsed_gch       = 0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.
+   !-- mineral components
+     num_minerals   = 3
+     the_minerals    = 'Gibbsite','FeOH3A','Calcite'
+     mineral_link    =  '',   '',  ''
+     w_gch           = 0.0, -1.0, 0.0
+   !-- iron redox
+     Riron_red = 0.0
+     Kiron_red = 100.
+     theta_iron_red = 1.07
+     Riron_aox = 0.0  !1 = 100% per day decay
+     Riron_box = 0.5
+     theta_iron_ox = 1.06
+   !-- advanced
+     simEq = .true.
+   ! dis_initial    = 0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1
+   ! speciesOutput  = 'CO2'
+   ! min_initial    = 0.01,0.01,0.01,0.01
+/
+
+
+!###############################################################################
+! LND: aed2_land - AED land/soil model
+!-------------------------------------------------------------------------------
+! oxy_initial   [float, unit = mmol/m^3]
+!                 initial O2 concentration (can be overwritten by GLM or TFV IC)
+! Fsed_oxy      [float, unit = mmol/m^2/day]
+!                 sediment oxygen demand (unused if Fsed_oxy_variable is active)
+! Ksed_oxy      [float, unit = mmol/m^3]
+!                 half-saturation concentration of oxygen sediment flux
+! theta_sed_oxy [float, unit = - ]
+!                 Arrhenius temperature multiplier for sediment oxygen flux
+!  Fsed_oxy_variable = Oxygen sedimentation variable link
+!                         eg 'aed_sedflux_Fsed_oxy' will use the value supplied
+!                          by the aed_sedflux model for Fsed_oxy
+!
+! NOTE: Processes such as photosynthesis and bacterial respiration from other
+!       AED modules should be configured to use the following names:
+!        aed_oxygen_oxy
+!
+! DIAGNOSTICS:
+!
+!-------------------------------------------------------------------------------
+&aed2_land
+   ! material zones to run the model:
+    n_zones = 4
+    active_zones = 8,9,16,17
+   ! soil depth limits
+    minbathy = -2.0     !mAHD
+    Dper = 2,2,2,2
+   ! soil properties
+    Porosity = 0.4,0.35,0.3,0.3
+    Density = 1500,1500,1500,1500
+    Zcap = 0.1,0.08,0.1,0.1
+    Ztrn = 0.1,0.05,0.06,0.06
+    fc = 0.1,0.04,0.04,0.08
+   ! evaporation parameters
+    Zebs = 0.5,0.5,0.4,0.5
+    aep = 0.8,0.8,1,1
+   ! infiltration parameters
+    infil_model = 1
+    phi = 0.01,0.01,0.01,0.01
+    f0 = 0.1,0.1,0.1,0.1
+    fmin = 0.1,0.1,0.1,0.1
+    Fmax = 0.1,0.1,0.1,0.1
+    regen = 0.1,0.1,0.1,0.1
+    decay = 0.1,0.1,0.1,0.1
+   ! flow  parameters
+    ass = 0.0001,0.0001,0.0001,0.001
+    Bss = 2,2,2,2
+    boundaryWThgt = 2.5
+   ! optional extras
+    simTemp = .false.
+    simSalt = .false.
+    simErosion = .false.
+/
+
+
+!###############################################################################
+! ASS: aed2_ass - AED acid sulfate soil model
+!-------------------------------------------------------------------------------
+! oxy_initial   [float, unit = mmol/m^3]
+!                 initial O2 concentration (can be overwritten by GLM or TFV IC)
+! Fsed_oxy      [float, unit = mmol/m^2/day]
+!                 sediment oxygen demand (unused if Fsed_oxy_variable is active)
+! Ksed_oxy      [float, unit = mmol/m^3]
+!                 half-saturation concentration of oxygen sediment flux
+! theta_sed_oxy [float, unit = - ]
+!                 Arrhenius temperature multiplier for sediment oxygen flux
+!  Fsed_oxy_variable = Oxygen sedimentation variable link
+!                         eg 'aed_sedflux_Fsed_oxy' will use the value supplied
+!                          by the aed_sedflux model for Fsed_oxy
+!
+! NOTE: Processes such as photosynthesis and bacterial respiration from other
+!       AED modules should be configured to use the following names:
+!        aed_oxygen_oxy
+!
+! DIAGNOSTICS:
+!
+!-------------------------------------------------------------------------------
+&aed2_ass
+   ! setup
+    n_zones = 4
+    active_zones = 4,5,6,7
+    nlay = 9
+    simProfiles = .TRUE.
+    zASS = 3,1,1,1
+    acid_link = 'GEO_ubalchg'
+    so4_link = 'GEO_SO4'
+    X_hso4 = 0.25
+   ! soil properties
+    Porosity = 0.4,0.35,0.3,0.3
+    Density = 1500,1500,1500,1500
+    pass_0 = 10.,10.,10.,10.
+   ! kinetic
+    Racid = 0.006,0.011,0.011,0.011
+   ! flux coefficients
+    flux_bf = 0.0,0,0,0
+    flux_rn = 1.0,1,1,1
+    flux_rn_max = 0.005,0.005,0.005,0.005
+    flux_rw_a = 0.161,0.138,0.138,0.138
+    flux_rw_d = 0.01,0.007,0.007,0.007
+/
+
+
+!###############################################################################
+! SBG: aed2_soilbgc - AED soil biogeochemistry model
+!-------------------------------------------------------------------------------
+&aed2_soilbgc
+   ! setup
+    n_zones = 4
+    active_zones = 8,9,16,17
+    nlay = 9
+    simProfiles = .TRUE.
+    zOM = 3,1,1,1
+    dom_link = ''
+    dic_link = ''
+    X_hso4 = 0.25
+   ! soil properties
+    Porosity = 0.4,0.35,0.3,0.3
+    Density = 1500,1500,1500,1500
+    pom_0 = 10.,10.,10.,10.
+   ! kinetic
+    Rom = 0.006,0.011,0.011,0.011
+   ! flux coefficients
+    flux_bf = 0.0,0,0,0
+    flux_rn = 1.0,1,1,1
+    flux_rn_max = 0.005,0.005,0.005,0.005
+    flux_rw_a = 0.161,0.138,0.138,0.138
+    flux_rw_d = 0.01,0.007,0.007,0.007
+/
+
+
+!###############################################################################
+! VEG: aed2_vegetation - AED (riparian) vegetation model
+!-------------------------------------------------------------------------------
+&aed2_vegetation
+   num_veg = 2
+   the_veg = 1,2
+   n_zones = 1
+   active_zones = 17
+   litter_target_variable_land = 'SBG_litter'
+   litter_target_variable_water = 'OGM_poc'
+   dbase='../External/AED2/aed2_vegetation_pars.nml'
+   simVegFeedback = .true.
+   simStaticBiomass = .true.
+   !simVegFrac
+   int_max = 0.01
+   lai_max = 5.
+   lai_link_variable = 'LND_lai'
+/
+
+
+!###############################################################################
+! TOT: aed2_totals
+!-------------------------------------------------------------------------------
+!  TN_vars      = list of variable contributing to total nitrogen
+!  TN_varscale  = scaling of TN variables contribution
+!  TP_vars      = list of variable contributing to total phosphorus
+!  TP_varscale  = scaling of TP variables contribution
+!  TOC_vars     = list of variable contributing to total organic carbon
+!  TOC_varscale = scaling of TOC variables contribution
+!  TSS_vars     = list of variable contributing to total suspended solids
+!  TSS_varscale = scaling of TSS variables contribution
+!                 <vector same length as TSS names>
+!-------------------------------------------------------------------------------
+&aed2_totals
+   outputLight  = .true.
+   TN_vars      =  'NIT_nit','NIT_amm','OGM_don','OGM_pon','OGM_donr','OGM_cpom','PHY_grn','PHY_bga','PHY_dino','PHY_crypt','PHY_diatom'
+   TN_varscale  =   1.0,      1.0,      1.0,       1.0,     1.0,       ,0.005     ,0.15     ,0.15     ,0.15       ,0.15       ,0.15
+   !TKN_vars     =  'NIT_amm','OGM_don','OGM_pon','OGM_donr','PHY_grn'
+   !TKN_varscale =   1.0,      1.0,       1.0,     1.0,       0.15
+   TP_vars =  'PHS_frp',
+              'PHS_frp_ads',
+              'OGM_dop',
+              'OGM_dopr',
+              'OGM_pop',
+              'OGM_cpom',
+              'PHY_grn',
+              'PHY_bga',
+              'PHY_dino',
+              'PHY_diatom',
+              'PHY_crypt'
+   TP_varscale = 1.0, 1.0, 1.0, 1.0, 1.0, 0.0001, 0.01, 0.01, 0.01, 0.01, 0.01
+   TOC_vars = 'OGM_doc',
+              'OGM_docr',
+              'OGM_poc',
+              'OGM_cpom',
+              'PHY_grn',
+              'PHY_bga',
+              'PHY_dino',
+              'PHY_diatom',
+              'PHY_crypt'
+   TOC_varscale = 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0
+   TSS_vars = 'TRC_ss1',
+              'TRC_ss2', 
+              'OGM_cpom',
+              'OGM_poc',
+              'PHY_grn',
+              'PHY_bga',
+              'PHY_dino',
+              'PHY_diatom',
+              'PHY_crypt'
+   TSS_varscale = 1.0, 1.0, 0.024, 0.024, 0.02, 0.02, 0.02, 0.02, 0.02
+   Turb_vars ='TRC_ss1',
+              'TRC_ss2', 
+              'OGM_cpom',
+              'OGM_poc',
+              'PHY_grn',
+              'PHY_bga',
+              'PHY_dino',
+              'PHY_diatom',
+              'PHY_crypt'
+   Turb_varscale = 0.33,0.30,0.001,0.001,0.001,0.001,0.001,0.001,0.001     
+   !TFe_vars =  'TRC_ss1',
+   !            'GEO_FeII',
+   !            'GEO_FeIII'
+   !TFe_varscale = 1.00,1.,1.
+   !TAl_vars =  'TRC_ss1',
+   !            'GEO_Al',
+   !TAl_varscale = 0.4,1.
+/  !
+
+
+!###############################################################################
+! HAB: aed2_habitat - AED habitat templates
+!-------------------------------------------------------------------------------
+!
+!
+!
+! DIAGNOSTICS:
+!
+!-------------------------------------------------------------------------------
+&aed2_habitat
+    simBirdForaging = .false.
+    simBenthicProd = .false.
+    simFishTolerance = .false.
+    ! Metal Toxicity
+    simMetalTox = .false.
+      mtox_vars =  'GEO_Al'
+      mtox_lims = 2.0
+    simCyanoRisk = .false.
+    simRuppiaHabitat = .true.
+    extra_diag = .true.
 /
