@@ -1,0 +1,69 @@
+
+&tfv_fabm
+   fabm_calc = .true.,
+   cnpar = 1.0,
+   w_adv_discr = 6,
+   ode_method = 1,
+   split_factor = 1,
+   bioshade_feedback = .true.,
+   repair_state = .true.,
+/
+
+&fabm_nml
+   models = 'aed_sediment',
+            'aed_oxygen'
+/
+
+!-------------------------------------------------------------------------------
+! aed_sediment
+!  sediment model types :
+!       "Constant" = sedimentation fluxes are constant values.
+!       "Spatially Variable" = Sedimentation fluxes may be different for
+!                                different benthic cells - provided by driver
+!       "Time Variable" = Sedimentation fluxes may be different for
+!                                different benthic cells at different times
+!                                        - computed by model
+!-------------------------------------------------------------------------------
+&aed_sediment
+!   sediment_model = 'Constant'
+   sediment_model = 'Spatially Variable'
+/
+
+&aed_sed_constant
+   Fsed_oxy = -50.0,
+   Fsed_rsi = 30.0,
+   Fsed_amm = 30.0,
+   Fsed_nit = 5.4,
+   Fsed_frp = 5.0,
+   Fsed_pon = 0.0,
+   Fsed_don = 0.0,
+   Fsed_pop = -0.01,
+   Fsed_dop = -900.0,
+   Fsed_poc = 0.00,
+   Fsed_doc = 30.0
+   Fsed_dic = 0.0
+/
+&aed_sed_spacial
+   n_zones = 3
+   Fsed_oxy =   20.0,  44.0,  61.0
+   Fsed_rsi =   30.0,   36.0,   33.0
+   Fsed_amm =   30.0,   36.0,   33.0
+   Fsed_nit =    5.4,    5.2,    5.0
+   Fsed_frp =    5.0,    5.2,    5.0
+   Fsed_pon =    0.0,    0.0,    0.0
+   Fsed_don =    0.0,    0.0,    0.0
+   Fsed_pop =   -0.01,  -0.02,  -0.03
+   Fsed_dop = -900.0, -850.0, -800.0
+   Fsed_poc =    0.0,    0.0,    0.0
+   Fsed_doc =   30.0,   31.0,   32.0
+   Fsed_dic =    0.0,    0.0,    0.0
+/
+!-------------------------------------------------------------------------------
+
+!-------------------------------------------------------------------------------
+&aed_oxygen
+   oxy_initial = 250.0,
+   Fsed_oxy = -50.0,
+   Ksed_oxy = 50.0,
+   theta_sed_oxy = 1.08
+/
