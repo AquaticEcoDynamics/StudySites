@@ -124,16 +124,16 @@ end material
 
 structure == nodestring,9!   the test one 8   ! two way Fish Gate  !originally from ocean to land (towards ups) direction  now from land to ocean direction
     flux function == matrix
-	flux file == ../BC/Fish_gate_Vasse_2way_X9.csv ! fish_gate_mike_2way.csv !using one way fish gate rating developed in mike11 with Ben Marillier
+	flux file == ../BC/Gate/Fish_gate_Vasse_2way_X9.csv ! fish_gate_mike_2way.csv !using one way fish gate rating developed in mike11 with Ben Marillier
 	control == timeseries
 	Control parameter == Fraction_open
-	Control file == ../BC/time_FishG_twoway_BB.csv!   timings_3.csv
+	Control file == ../BC/Gate/time_FishG_twoway_BB.csv!   timings_3.csv
 end structure
 
 !structure == nodestring,6  ! Vasse Flood Gate   !   originally from land to ocean direction now from land to ocean direction
 !    !Properties == 1.6,1.6
 !	flux function == matrix
-!	flux file == ../BC/Flood_gate_Vasse_1way.csv! flood_gate_1.csv
+!	flux file == ../BC/Gate/Flood_gate_Vasse_1way.csv! flood_gate_1.csv
 !	control == timeseries
 !	Control parameter == Fraction_open
 !	Control file == ../BC/time_2_FloodG_N8.csv !  timings_2.csv
@@ -145,60 +145,60 @@ end structure
 !_________________________________________________________________
 
 
-bc == WL, 1, ../BC/DS_ALE_05minTEMPSALWL.csv ! the ocean BC  it comes from the file Ale sent w 5 min interval meas- she reckons sal is too high but using it for naow
+bc == WL, 1, ../BC/Inflow/DS_ALE_05minTEMPSALWL.csv ! the ocean BC  it comes from the file Ale sent w 5 min interval meas- she reckons sal is too high but using it for naow
   bc header == ISOTime,wl,Sal,Temp,SS1,SS2,RET,Oxy,Sil,Amm,Nit,FRP,FRP_ADS,DOC,POC,DON,PON,DOP,POP,DOCR,DONR,DOPR,CPOM,GRN,BGA,CRYPT,DIATOM,DINO
 end bc
 
-bc == Q, 2, ../BC/vasse_flow.csv
+bc == Q, 2, ../BC/Inflow/vasse_flow.csv
  bc header == ISOTime,Flow,Sal,Temp,SS1,SS2,RET,Oxy,Sil,Amm,Nit,FRP,FRP_ADS,DOC,POC,DON,PON,DOP,POP,DOCR,DONR,DOPR,CPOM,GRN,BGA,CRYPT,DIATOM,DINO
 end bc
 
-bc == Q, 3, ../BC/sabina_flow.csv
+bc == Q, 3, ../BC/Inflow/sabina_flow.csv
   bc header == ISOTime,Flow,Sal,Temp,SS1,SS2,RET,Oxy,Sil,Amm,Nit,FRP,FRP_ADS,DOC,POC,DON,PON,DOP,POP,DOCR,DONR,DOPR,CPOM,GRN,BGA,CRYPT,DIATOM,DINO
 end bc
 
-bc == Q, 4, ../BC/abba_flow.csv
+bc == Q, 4, ../BC/Inflow/abba_flow.csv
   bc header ==  ISOTime,Flow,Sal,Temp,SS1,SS2,RET,Oxy,Sil,Amm,Nit,FRP,FRP_ADS,DOC,POC,DON,PON,DOP,POP,DOCR,DONR,DOPR,CPOM,GRN,BGA,CRYPT,DIATOM,DINO
 end bc
 
 
 
-bc == W10, ..\BC\wind.csv
+bc == W10, ..\BC\Met\wind.csv
   bc header == ISOTime,Wx,Wy
   bc scale  == 1.0,1.0 ! changed from previous ran 1,6!!
 end bc
 
-bc == AIR_TEMP, ..\BC\temp.csv
+bc == AIR_TEMP, ..\BC\Met\temp.csv
   bc header == ISOTime,ATemp
 end bc
 
-bc == REL_HUM, ..\BC\rh.csv
+bc == REL_HUM, ..\BC\Met\rh.csv
   bc header == ISOTime,Rel_Hum
 end bc
 
-bc == SW_RAD, ..\BC\sr.csv
+bc == SW_RAD, ..\BC\Met\sr.csv
   bc header == ISOTime,Sol_Rad
 end bc
 
-bc == CLOUD, ..\BC\clouds.csv
+bc == CLOUD, ..\BC\Met\clouds.csv
   bc header == ISOTime,Clouds
 end bc
 
-bc == PRECIP, ..\BC\rain.csv
+bc == PRECIP, ..\BC\Met\rain.csv
   bc header == ISOTime,Precip
 end bc
 
 !! Oxygenation _____________________________________________________
 !
-bc == QC, 352865.111250937,6278894.66505734, ..\BC\p1_Oxygenation_Plant.csv
+bc == QC, 352865.111250937,6278894.66505734, ..\BC\Oxy\p1_Oxygenation_Plant.csv
   bc header == ISOTime,Flow,Sal,Temp,SS1,SS2,RET,Oxy,Sil,Amm,Nit,FRP,FRP_ADS,DOC,POC,DON,PON,DOP,POP,DOCR,DONR,DOPR,CPOM,GRN,BGA,CRYPT,DIATOM,DINO
   vertical coordinate type == height
-  vertical distribution == ..\BC\oxy_z.csv
+  vertical distribution == ..\BC\Oxy\oxy_z.csv
 end bc
-bc == QC, 352735.727978281,6278749.38911401, ..\BC\p2_Oxygenation_Plant.csv
+bc == QC, 352735.727978281,6278749.38911401, ..\BC\Oxy\p2_Oxygenation_Plant.csv
   bc header == ISOTime,Flow,Sal,Temp,SS1,SS2,RET,Oxy,Sil,Amm,Nit,FRP,FRP_ADS,DOC,POC,DON,PON,DOP,POP,DOCR,DONR,DOPR,CPOM,GRN,BGA,CRYPT,DIATOM,DINO
   vertical coordinate type == height
-  vertical distribution == ..\BC\oxy_z.csv
+  vertical distribution == ..\BC\Oxy\oxy_z.csv
 end bc
 
 

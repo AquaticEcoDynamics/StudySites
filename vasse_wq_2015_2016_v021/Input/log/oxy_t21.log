@@ -1,0 +1,1383 @@
+
+***************************** TUFLOWFV *****************************
+
+Build version: 2015.01.015_dev
+Build date: 13/01/2017 10:50
+Build platform: Windows
+Build architecture:  x86-64
+Compiler version: Ifort 16.0.1
+Build precision: single
+
+********************************************************************
+
+Computer name: OXY2
+User name: hydro
+Execution timestamp: 24/07/2017 09:53:59
+
+
+Initialising TUFLOW Dongle Settings...
+Looking for "C:\BMT_WBM\TUFLOW_Dongle_Settings.dcf"...not found.
+
+"C:\BMT_WBM\TUFLOW_Dongle_Settings.dcf" does not exist - default settings assigned.
+Simulations Log Folder == C:\BMT_WBM\log  ! Path or URL to global simulations log folder.  Default is "C:\BMT_WBM\log"
+WIBU Retry Time == 60  ! Seconds.  Values less than 1 are set to 1.  Default = 60.
+WIBU Retry Count == 0  ! Number of times to retry for a licence at start of simulation.  Use -1 for indefinitely.  Default = 0.
+WIBU Dongles Only == OFF  ! If set to ON, searches for WIBU dongles only.  Default is OFF.
+
+Attempting to process input control file:
+Trying to open file: oxy_t21.fvc ... OK. File unit: 101
+Start echoing input file:
+TIME FORMAT == ISO DATE
+REFERENCE TIME == 01/01/2001 00:00:00
+START TIME == 03/12/2015 00:00:00
+END TIME == 31/05/2016 00:00:00
+CFL EXTERNAL ==   0.9000000
+CFL INTERNAL ==   0.9000000
+TIMESTEP LIMITS ==   0.1000000    ,    5.000000
+ATMOS UPDATE DT ==    60.00000
+DISPLAY DT ==    300.0000
+MOMENTUM MIXING MODEL == SMAGORINSKY
+SCALAR MIXING MODEL == SMAGORINSKY
+SPHERICAL == .FALSE.
+LONG WAVE RADIATION MODEL == 3
+SW RADIATION ALBEDO (MEAN AT EQUATOR) ==   0.2500000
+INCLUDE HEAT == .TRUE.
+INCLUDE SALINITY == .TRUE.
+COUPLE SALINITY DENSITY == .TRUE.
+INCLUDE TEMPERATURE == .TRUE.
+COUPLE TEMPERATURE DENSITY == .TRUE.
+SPATIAL ORDER == 1, 2
+VERTICALGRADIENTLIMITER == MC
+BOTTOM DRAG MODEL == MANNING
+EQUATION OF STATE == UNESCO
+VERTICAL MIXING MODEL == EXTERNAL
+EXTERNAL TURBULENCE MODEL DIR == ..\External\GOTM\
+INITIAL CONDITION 2D == ..\BC\Initial\init_conditions.csv
+STABILITY LIMITS ==    15.00000    ,    15.00000
+CELL DRY/WET DEPTHS ==   0.4000000E-01,   0.4000000E-01
+G ==    9.810000
+LATITUDE ==   -31.95550
+GLOBAL BOTTOM ROUGHNESS ==   0.2000000E-02
+GLOBAL HORIZONTAL EDDY VISCOSITY (SMAG COEFF) ==   0.2000000
+GLOBAL HORIZONTAL SCALAR DIFFUSIVITY (SMAG COEFF) ==   0.2000000
+DIFFUSIVITY LIMITER DT ==    30.00000
+BACKGROUND VISCOSITY ==   0.1000000E-05
+GLOBAL VERTICAL EDDY VISCOSITY LIMITS ==   0.1000000E-03,    9999.000
+GLOBAL VERTICAL SCALAR DIFFUSIVITY LIMITS ==   0.1000000E-05,    9999.000
+REFERENCE SALINITY ==    35.00000
+REFERENCE TEMPERATURE ==    18.00000
+REFERENCE DENSITY ==    1000.000
+DENSITY AIR ==    1.180000
+SHORTWAVE RADIATION EXTINCTION COEFFICIENTS ==    5.000000        1.500000        3.000000        5.000000
+SHORTWAVE RADIATION FRACTIONS ==   0.5100000       0.4500000       0.3500000E-01   0.5000000E-02
+GEOMETRY2D == ..\Geo\just_fishG_2w.2dm
+ECHO GEOMETRY CSV == .FALSE.
+ECHO GEOMETRY NETCDF == .TRUE.
+MINIMUM LAYER THICKNESS ==   0.1000000
+MATERIAL == 1
+  BOTTOM ROUGHNESS ==   0.4000000E-01
+END MATERIAL
+MATERIAL == 2
+  BOTTOM ROUGHNESS ==   0.1200000E-01
+END MATERIAL
+MATERIAL == 3
+  BOTTOM ROUGHNESS ==   0.1800000E-01
+END MATERIAL
+STRUCTURE == NODESTRING, 9
+  FLUX FUNCTION == MATRIX
+  FLUX FILE == ..\BC\Gate\Fish_gate_Vasse_2way_X9.csv
+  CONTROL == TIMESERIES
+  CONTROL PARAMETER == FRACTION_OPEN
+  CONTROL FILE == ..\BC\Gate\time_FishG_twoway_BB.csv
+END STRUCTURE
+BC == WL, 1, ..\BC\Inflow\DS_ALE_05minTEMPSALWL.csv
+  BC HEADER ==  ISOTime, wl, Sal, Temp, SS1, SS2, RET, Oxy, Sil, Amm, Nit, FRP, FRP_ADS, DOC, POC, DON, PON, DOP, POP, DOCR, DONR, DOPR, CPOM, GRN, BGA, CRYPT, DIATOM, DINO
+END BC
+BC == Q, 2, ..\BC\Inflow\vasse_flow.csv
+  BC HEADER ==  ISOTime, Flow, Sal, Temp, SS1, SS2, RET, Oxy, Sil, Amm, Nit, FRP, FRP_ADS, DOC, POC, DON, PON, DOP, POP, DOCR, DONR, DOPR, CPOM, GRN, BGA, CRYPT, DIATOM, DINO
+END BC
+BC == Q, 3, ..\BC\Inflow\sabina_flow.csv
+  BC HEADER ==  ISOTime, Flow, Sal, Temp, SS1, SS2, RET, Oxy, Sil, Amm, Nit, FRP, FRP_ADS, DOC, POC, DON, PON, DOP, POP, DOCR, DONR, DOPR, CPOM, GRN, BGA, CRYPT, DIATOM, DINO
+END BC
+BC == Q, 4, ..\BC\Inflow\abba_flow.csv
+  BC HEADER ==  ISOTime, Flow, Sal, Temp, SS1, SS2, RET, Oxy, Sil, Amm, Nit, FRP, FRP_ADS, DOC, POC, DON, PON, DOP, POP, DOCR, DONR, DOPR, CPOM, GRN, BGA, CRYPT, DIATOM, DINO
+END BC
+BC == W10, ..\BC\Met\wind.csv
+  BC HEADER ==  ISOTime, Wx, Wy
+  BC SCALE ==    1.000000,   1.000000
+END BC
+BC == AIR_TEMP, ..\BC\Met\temp.csv
+  BC HEADER ==  ISOTime, ATemp
+END BC
+BC == REL_HUM, ..\BC\Met\rh.csv
+  BC HEADER ==  ISOTime, Rel_Hum
+END BC
+BC == SW_RAD, ..\BC\Met\sr.csv
+  BC HEADER ==  ISOTime, Sol_Rad
+END BC
+BC == CLOUD, ..\BC\Met\clouds.csv
+  BC HEADER ==  ISOTime, Clouds
+END BC
+BC == PRECIP, ..\BC\Met\rain.csv
+  BC HEADER ==  ISOTime, Precip
+END BC
+BC == QC,    352865.1    ,    6278895.    , ..\BC\Oxy\p1_Oxygenation_Plant.csv
+  BC HEADER ==  ISOTime, Flow, Sal, Temp, SS1, SS2, RET, Oxy, Sil, Amm, Nit, FRP, FRP_ADS, DOC, POC, DON, PON, DOP, POP, DOCR, DONR, DOPR, CPOM, GRN, BGA, CRYPT, DIATOM, DINO
+  VERTICAL COORDINATE TYPE == HEIGHT
+  VERTICAL DISTRIBUTION FILE == ..\BC\Oxy\oxy_z.csv
+END BC
+BC == QC,    352735.7    ,    6278749.    , ..\BC\Oxy\p2_Oxygenation_Plant.csv
+  BC HEADER ==  ISOTime, Flow, Sal, Temp, SS1, SS2, RET, Oxy, Sil, Amm, Nit, FRP, FRP_ADS, DOC, POC, DON, PON, DOP, POP, DOCR, DONR, DOPR, CPOM, GRN, BGA, CRYPT, DIATOM, DINO
+  VERTICAL COORDINATE TYPE == HEIGHT
+  VERTICAL DISTRIBUTION FILE == ..\BC\Oxy\oxy_z.csv
+END BC
+OUTPUT DIR == ..\Output
+OUTPUT == NETCDF
+  OUTPUT PARAMETERS ==  H, V, SAL, TEMP, D, WQ_ALL, WQ_DIAG_ALL,
+  OUTPUT INTERVAL ==    7200.000
+END OUTPUT
+OUTPUT == DATV
+  OUTPUT PARAMETERS ==  H, V, SAL, TEMP, D,
+  OUTPUT INTERVAL ==    7200.000
+END OUTPUT
+OUTPUT == FLUX
+  OUTPUT INTERVAL ==    7200.000
+END OUTPUT
+WRITE RESTART DT ==    10.00000
+Closing file unit: 101
+Finished echoing input file.
+Successful.
+
+Initialising TUFLOW-FV engine license:
+TUFLOW FV Engine       Dongle 3793274  Expiry 2018/03/27  Local   1 of   1 (0 remaining)
+Succesfully found WIBU TUFLOW-FV engine license
+
+Initialising TUFLOW-FV simulation threads:
+TUFLOW FV Threads (8)  Dongle 3793274  Expiry 2018/03/27  Local   1 to   8 (2 remaining)
+Successfully initialised 8 threads.
+
+Initialising requested TUFLOW-FV module license/s:
+TUFLOW FV AD Module    Dongle 3793274  Expiry 2018/03/27  Local   1 of   1 (0 remaining)
+Successful.
+
+Attempting to build model domain object/s:
+
+Processing mesh geometry file/s:
+Reading 2dm mesh file...
+Trying to open file: ..\Geo\just_fishG_2w.2dm ... OK. File unit: 101
+Closing file unit: 101
+Finished reading 2dm mesh file.
+
+Processing mesh face connections...
+Finished processing mesh face connections.
+
+Found 16462 nodes.
+Found 19757 2D cells.
+Found 9 nodestrings.
+Mesh geometry file/s succesfully processed.
+
+Constructing domain, comprising:
+ 19757 2D cells.
+ 19757 3D cells.
+ 36218 3D faces.
+Constructing node object...OK
+Constructing cell object...OK
+Constructing face object...OK
+Constructing external mode objects...OK
+Echoing geometry data:
+Trying to open file: log\oxy_t21_geo.nc ...OK.
+Closing file: log\oxy_t21_geo.nc
+
+Successfully built model domain object/s.
+
+Attempting to initialise atmospheric module:
+Successfully initialised atmospheric module.
+
+Attempting to initialise external turbulence model:
+Initialising "GOTM" external turbulence module:
+Successful.
+
+Succesfully initialised external turbulence model.
+
+Attempting to initialise model structural configurations:
+Constructing struct object...
+Structure 1.
+Nodestring Structure Type.
+Nodestring ID: 9
+Trying to open file: ..\BC\Gate\Fish_gate_Vasse_2way_X9.csv ... OK. File unit: 101
+Closing file unit: 101
+Trying to open file: ..\BC\Gate\time_FishG_twoway_BB.csv ... OK. File unit: 101
+TIME,FRACTION_OPEN, columns read from csvfile. 88189 lines successfully read.
+Closing file unit: 101
+Structure 1 is OK.
+
+Finished constructing struct object
+Successfully initialised model structural configurations.
+
+Attempting to initialise model boundary conditions:
+Constructing fvbc object...
+
+BC 1, Type=WL
+Subtype=1
+BC Nodestring id = 1
+BC reference time = 01/01/2001 00:00:00
+BC time units = HOURS
+BC variable offset/s =  0.00E+00        0.00E+00        0.00E+00
+BC variable scale/s =  1.00E+00        1.00E+00        1.00E+00
+BC variable default/s =       NaN             NaN             NaN
+Trying to open file: ..\BC\Inflow\DS_ALE_05minTEMPSALWL.csv ... OK. File unit: 101
+ISOTime,wl,Sal,Temp, columns read from csvfile. 96469 lines successfully read.
+Closing file unit: 101
+BC 1 is OK
+
+BC 2, Type=Q
+Subtype=1
+BC Nodestring id = 2
+BC reference time = 01/01/2001 00:00:00
+BC time units = HOURS
+BC variable offset/s =  0.00E+00        0.00E+00        0.00E+00
+BC variable scale/s =  1.00E+00        1.00E+00        1.00E+00
+BC variable default/s =       NaN             NaN             NaN
+Trying to open file: ..\BC\Inflow\vasse_flow.csv ... OK. File unit: 101
+ISOTime,Flow,Sal,Temp, columns read from csvfile. 9232 lines successfully read.
+Closing file unit: 101
+BC 2 is OK
+
+BC 3, Type=Q
+Subtype=1
+BC Nodestring id = 3
+BC reference time = 01/01/2001 00:00:00
+BC time units = HOURS
+BC variable offset/s =  0.00E+00        0.00E+00        0.00E+00
+BC variable scale/s =  1.00E+00        1.00E+00        1.00E+00
+BC variable default/s =       NaN             NaN             NaN
+Trying to open file: ..\BC\Inflow\sabina_flow.csv ... OK. File unit: 101
+ISOTime,Flow,Sal,Temp, columns read from csvfile. 15076 lines successfully read.
+Closing file unit: 101
+BC 3 is OK
+
+BC 4, Type=Q
+Subtype=1
+BC Nodestring id = 4
+BC reference time = 01/01/2001 00:00:00
+BC time units = HOURS
+BC variable offset/s =  0.00E+00        0.00E+00        0.00E+00
+BC variable scale/s =  1.00E+00        1.00E+00        1.00E+00
+BC variable default/s =       NaN             NaN             NaN
+Trying to open file: ..\BC\Inflow\abba_flow.csv ... OK. File unit: 101
+ISOTime,Flow,Sal,Temp, columns read from csvfile. 7636 lines successfully read.
+Closing file unit: 101
+BC 4 is OK
+
+BC 5, Type=W10
+BC reference time = 01/01/2001 00:00:00
+BC time units = HOURS
+BC variable offset/s =  0.00E+00        0.00E+00
+BC variable scale/s =  1.00E+00        1.00E+00
+BC variable default/s =       NaN             NaN
+Trying to open file: ..\BC\Met\wind.csv ... OK. File unit: 101
+ISOTime,Wx,Wy, columns read from csvfile. 64987 lines successfully read.
+Closing file unit: 101
+BC 5 is OK
+
+BC 6, Type=AIR_TEMP
+BC reference time = 01/01/2001 00:00:00
+BC time units = HOURS
+BC variable offset/s =  0.00E+00
+BC variable scale/s =  1.00E+00
+BC variable default/s =       NaN
+Trying to open file: ..\BC\Met\temp.csv ... OK. File unit: 101
+ISOTime,ATemp, columns read from csvfile. 64987 lines successfully read.
+Closing file unit: 101
+BC 6 is OK
+
+BC 7, Type=REL_HUM
+BC reference time = 01/01/2001 00:00:00
+BC time units = HOURS
+BC variable offset/s =  0.00E+00
+BC variable scale/s =  1.00E+00
+BC variable default/s =       NaN
+Trying to open file: ..\BC\Met\rh.csv ... OK. File unit: 101
+ISOTime,Rel_Hum, columns read from csvfile. 64987 lines successfully read.
+Closing file unit: 101
+BC 7 is OK
+
+BC 8, Type=SW_RAD
+BC reference time = 01/01/2001 00:00:00
+BC time units = HOURS
+BC variable offset/s =  0.00E+00
+BC variable scale/s =  1.00E+00
+BC variable default/s =       NaN
+Trying to open file: ..\BC\Met\sr.csv ... OK. File unit: 101
+ISOTime,Sol_Rad, columns read from csvfile. 64987 lines successfully read.
+Closing file unit: 101
+BC 8 is OK
+
+BC 9, Type=CLOUD
+BC reference time = 01/01/2001 00:00:00
+BC time units = HOURS
+BC variable offset/s =  0.00E+00
+BC variable scale/s =  1.00E+00
+BC variable default/s =       NaN
+Trying to open file: ..\BC\Met\clouds.csv ... OK. File unit: 101
+ISOTime,Clouds, columns read from csvfile. 64987 lines successfully read.
+Closing file unit: 101
+BC 9 is OK
+
+BC 10, Type=PRECIP
+BC reference time = 01/01/2001 00:00:00
+BC time units = HOURS
+BC variable offset/s =  0.00E+00        0.00E+00
+BC variable scale/s =  1.00E+00        1.00E+00
+BC variable default/s =       NaN             NaN
+Trying to open file: ..\BC\Met\rain.csv ... OK. File unit: 101
+WARNING: PRECIP_TEMP column not found in csv file. Assigning a value of             NaN
+ISOTime,Precip, columns read from csvfile. 2751 lines successfully read.
+Closing file unit: 101
+BC 10 is OK
+
+BC 11, Type=QC
+Subtype=1
+Cell id=271
+BC reference time = 01/01/2001 00:00:00
+BC time units = HOURS
+BC variable offset/s =  0.00E+00        0.00E+00        0.00E+00
+BC variable scale/s =  1.00E+00        1.00E+00        1.00E+00
+BC variable default/s =       NaN             NaN             NaN
+Trying to open file: ..\BC\Oxy\p1_Oxygenation_Plant.csv ... OK. File unit: 101
+ISOTime,Flow,Sal,Temp, columns read from csvfile. 4921 lines successfully read.
+Closing file unit: 101
+Vertical Distribution Type=3
+Trying to open file: ..\BC\Oxy\oxy_z.csv ... OK. File unit: 101
+HEIGHT,WEIGHT, columns read from csvfile. 4 lines successfully read.
+Closing file unit: 101
+BC 11 is OK
+
+BC 12, Type=QC
+Subtype=1
+Cell id=413
+BC reference time = 01/01/2001 00:00:00
+BC time units = HOURS
+BC variable offset/s =  0.00E+00        0.00E+00        0.00E+00
+BC variable scale/s =  1.00E+00        1.00E+00        1.00E+00
+BC variable default/s =       NaN             NaN             NaN
+Trying to open file: ..\BC\Oxy\p2_Oxygenation_Plant.csv ... OK. File unit: 101
+ISOTime,Flow,Sal,Temp, columns read from csvfile. 4921 lines successfully read.
+Closing file unit: 101
+Vertical Distribution Type=3
+Trying to open file: ..\BC\Oxy\oxy_z.csv ... OK. File unit: 101
+HEIGHT,WEIGHT, columns read from csvfile. 4 lines successfully read.
+Closing file unit: 101
+BC 12 is OK
+
+Finished constructing fvbc object.
+
+Initialising ghost cell boundary conditions...
+Finished initialising ghost cell boundary conditions.
+
+Initialising face object boundary conditions...
+Finished initialising face object boundary conditions.
+
+Successfully initialised model boundary conditions.
+
+Attempting to generate model initial conditions:
+Trying to open file: ..\BC\Initial\init_conditions.csv ... OK. File unit: 101
+ID,WL,U,V,SAL,TEMP, columns read from csvfile. 19749 lines successfully read.
+Closing file unit: 101
+Successfully generated model initial conditions.
+
+Attempting to initialise model output:
+
+Allocating output object memory:
+Memory allocation OK.
+
+Processing output requests:
+Processing request 1 is...
+OK.
+Processing request 2 is...
+OK.
+Processing request 3 is...
+OK.
+
+Opening output files...
+Trying to open file: ..\Output\oxy_t21.nc ...OK
+Trying to open file: ..\Output\oxy_t21_H.dat ... OK. File unit: 101
+Trying to open file: ..\Output\oxy_t21_V.dat ... OK. File unit: 102
+Trying to open file: ..\Output\oxy_t21_SAL.dat ... OK. File unit: 103
+Trying to open file: ..\Output\oxy_t21_TEMP.dat ... OK. File unit: 104
+Trying to open file: ..\Output\oxy_t21_D.dat ... OK. File unit: 105
+Trying to open file: ..\Output\oxy_t21_FLUX.csv ... OK. File unit: 106
+
+Successfully initialised model output.
+
+Running simulation
+Number of OpenMP threads=8
+Thread stacksize=4194304
+
+Entering timestep loop
+t = 03/12/2015 00:00:00.  dt =   0.000 /  0.000 s.  elapsed time =       0.0 s.
+    Writing NETCDF output. t = 03/12/2015 00:00:00.
+    Writing H datfile output. t = 03/12/2015 00:00:00.
+    Writing V datfile output. t = 03/12/2015 00:00:00.
+    Writing SAL datfile output. t = 03/12/2015 00:00:00.
+    Writing TEMP datfile output. t = 03/12/2015 00:00:00.
+    Writing D datfile output. t = 03/12/2015 00:00:00.
+    Writing nodestring flux output. t = 03/12/2015 00:00:00.
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+t = 03/12/2015 00:05:02.  dt =   4.827 /  0.201 s.  elapsed time =       4.8 s.
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+WARNING: Unable to solve for specified inflow conditions at bc 3
+t = 03/12/2015 00:10:02.  dt =   4.896 /  0.204 s.  elapsed time =       8.9 s.
+t = 03/12/2015 00:15:03.  dt =   4.930 /  0.205 s.  elapsed time =      12.6 s.
+t = 03/12/2015 00:20:03.  dt =   4.843 /  0.202 s.  elapsed time =      17.4 s.
+t = 03/12/2015 00:25:02.  dt =   4.947 /  0.206 s.  elapsed time =      22.4 s.
+t = 03/12/2015 00:30:00.  dt =   4.894 /  0.204 s.  elapsed time =      26.8 s.
+t = 03/12/2015 00:35:01.  dt =   4.896 /  0.204 s.  elapsed time =      31.3 s.
+t = 03/12/2015 00:40:04.  dt =   4.934 /  0.206 s.  elapsed time =      35.8 s.
+t = 03/12/2015 00:45:03.  dt =   4.869 /  0.203 s.  elapsed time =      40.1 s.
+t = 03/12/2015 00:50:02.  dt =   4.906 /  0.204 s.  elapsed time =      44.2 s.
+t = 03/12/2015 00:55:00.  dt =   4.903 /  0.204 s.  elapsed time =      48.5 s.
+t = 03/12/2015 01:00:05.  dt =   4.887 /  0.204 s.  elapsed time =      52.9 s.
