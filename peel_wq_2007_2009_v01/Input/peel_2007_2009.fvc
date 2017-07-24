@@ -1,0 +1,148 @@
+! Peel-Harvey Estuary Visual Observatory Simulation
+!____________________________________________________________
+!
+!TIME COMMANDS
+!_________________________________________________________________
+time format == ISODATE
+reference time == 01/01/2001
+start time == 01/12/2007 00:00:00 
+end time ==  01/01/2009 00:00:00 
+cfl external == 0.9
+cfl internal == 0.9
+timestep limits == 0.1, 5.0 ! Min and Max Timesteps
+turbulence update dt == 600                                     ! for GOTM (s)
+display dt == 300
+!
+! SIMULATION CONFIGURATION
+!_________________________________________________________________
+momentum mixing model == SMAGORINSKY                     
+scalar mixing model == ELDER                             
+LONGWAVERADIATIONMODEL == 5
+LONGWAVERADIATIONALBEDO == 0.03
+SHORTWAVERADIATIONALBEDO == 0.03
+!HEAT PAR EXTINCTION == 0.6
+!
+include heat == 1,1
+include salinity == 1,1
+include temperature == 1,1
+include sediment == 0,0
+spatial order == 1,2
+!
+horizontal gradient limiter == LCD
+vertical gradient limiter == MC
+bottom drag model == ks
+equation of state == UNESCO
+!
+vertical mixing model == external !parametric !constant 
+external turbulence model dir == ..\External\GOTM\
+!waterqualitymodel == EXTERNAL
+!external water quality model dir == ..\External\AED2\
+!
+!MODEL PARAMETERS
+!_________________________________________________________________
+stability limits == 100.,500.
+cell wet/dry depths == 2.0e-2, 2.0e-2
+global horizontal eddy viscosity == 0.2
+global horizontal scalar diffusivity == 250.0,25.0
+g == 9.81
+reference density == 1025.
+latitude == -32.8
+Ntracer == 0
+!Initial Water Level == 0.1
+!_________________________________________________________________
+!
+!GEOMETRY
+!_________________________________________________________________
+geometry 2d == ../Geo/peel_v8_10m_dem_05m_clip.2dm
+echo geometry csv == 0
+echo geometry netcdf == 0
+vertical mesh type == sigma
+layer faces == ..\Geo\layers_sigma.csv
+!Surface Sigma layers == 6 
+!min bottom layer thickness == 0.1
+!cell 3d depth == 5.0e-1
+!_________________________________________________________________
+!MATERIAL
+!_________________________________________________________________
+material == 1  ! Peel
+  bottom roughness == 0.002
+end material
+!_________________________________________________________________
+!
+!BOUNDARY CONDITIONS
+!_________________________________________________________________
+
+!bc == QC, 392834.2,6421062.5, ..\BC\Serpentine_river.csv
+bc == Q, 4, ..\BC\Inflow\Serpentine_river.csv
+  bc header == ISOTime,flow,sal,temp,oxy,trc_ret !aed_oxygen_oxy,aed_nitrogen_amm,aed_nitrogen_nit,aed_phosphorus_frp,aed_organic_matter_don,aed_organic_matter_pon,aed_organic_matter_dop,aed_organic_matter_pop,aed_organic_matter_doc,aed_organic_matter_poc,ss1,chla
+  bc scale == 1.2,1,1,1,1
+end bc
+
+bc == Q, 3, ..\BC\Inflow\Murray_river.csv
+  bc header == ISOTime,flow,sal,temp,oxy,trc_ret !aed_oxygen_oxy,aed_nitrogen_amm,aed_nitrogen_nit,aed_phosphorus_frp,aed_organic_matter_don,aed_organic_matter_pon,aed_organic_matter_dop,aed_organic_matter_pop,aed_organic_matter_doc,aed_organic_matter_poc,ss1,chla
+  bc scale == 1.0,1,1,1,1
+end bc
+
+bc == Q, 2, ..\BC\Inflow\Harvey_river.csv
+  bc header == ISOTime,flow,sal,temp,oxy,trc_ret !aed_oxygen_oxy,aed_nitrogen_amm,aed_nitrogen_nit,aed_phosphorus_frp,aed_organic_matter_don,aed_organic_matter_pon,aed_organic_matter_dop,aed_organic_matter_pop,aed_organic_matter_doc,aed_organic_matter_poc,ss1,chla
+  bc scale == 1.0,1,1,1,1
+end bc
+
+
+bc == WL, 1, ..\BC\Inflow\freo_tide.csv
+  bc header ==  ISOTime,wl,sal,temp,oxy,trc_ret !aed_oxygen_oxy,aed_silica_rsi,aed_nitrogen_amm,aed_nitrogen_nit,aed_phosphorus_frp,aed_organic_matter_pon,aed_organic_matter_don,aed_organic_matter_pop,aed_organic_matter_dop,aed_organic_matter_poc,aed_organic_matter_doc,aed_phytoplankton_green,aed_phytoplankton_diatom,aed_phytoplankton_bga,ph,ss1,ss2,na,mg,k,cl,so4,feoh3,al,aloh3,uchgbal,feii,feiii,bga_IN,bga_IP,fdi_IN,fdi_IP,grn_IN,grn_IP,mnii,mniv,mno2,caco3,trc1,trc2,trc3
+  bc offset == -0.81,0,0,0,0
+end bc
+
+bc == W10, ..\BC\Met\tfv_met_mandurah_new.csv
+  bc header == ISOTime,Wx,Wy
+  bc scale  == 1.0,1.0
+end bc
+
+bc == AIR_TEMP, ..\BC\Met\tfv_met_mandurah_new.csv
+  bc header == ISOTime,ATemp
+end bc
+
+bc == REL_HUM, ..\BC\Met\tfv_met_mandurah_new.csv
+  bc header == ISOTime,Rel_Hum
+  bc scale == 1.0
+end bc
+
+bc == SW_RAD, ..\BC\Met\tfv_met_mandurah_new.csv
+  bc header == ISOTime,Sol_Rad
+  bc scale == 1.0
+end bc
+
+bc == CLOUD, ..\BC\Met\tfv_met_mandurah_new.csv
+  bc header == ISOTime,Clouds
+  bc scale == 1.0
+end bc
+
+bc == PRECIP, ..\BC\Met\tfv_rain_mandurah_new.csv
+  bc header == ISOTime,Precip
+end bc
+!bc scale == 0.75
+
+
+!INITIAL CONDITIONS
+!_________________________________________________________________
+
+INITIAL CONDITION 2D == ..\BC\Initial\Peel_IC_3D.csv
+initial water level == 0.810
+!restart file == peel.rst
+!use Restart File Time == 1
+
+!OUTPUT COMMANDS
+!_________________________________________________________________
+
+output dir ==  ..\Output\
+	
+output == netcdf
+  output parameters == h,v,w,d,Sal,Temp
+  output interval == 7200.00 
+end output
+
+write restart dt == 24.
+
+
+
