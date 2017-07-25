@@ -1,2 +1,2 @@
-# TFV_AED2_Swan_Models
-Folder containing model input files for various estuaries and lakes
+# Swan Estuarine Models
+This folder contains two model set-ups for the swan domain. An upperswan domain (UD) starting at the Narrows Bridge, and a full domain starting in Cockburn Sound.
