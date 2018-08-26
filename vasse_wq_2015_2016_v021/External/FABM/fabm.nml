@@ -1,0 +1,508 @@
+&tfv_fabm
+   fabm_calc = .true.,
+   cnpar = 1.0,
+   w_adv_discr = 6,
+   ode_method = 1,
+   split_factor = 1,
+   bioshade_feedback = .true.,
+   repair_state = .true.,
+/
+
+!-------------------------------------------------------------------------------
+! fabm_nml
+!-------------------------------------------------------------------------------
+&fabm_nml
+   models = 'aed_sedflux',
+            'aed_oxygen',
+            !'aed_carbon',
+            !'aed_silica',
+            'aed_nitrogen',
+            'aed_phosphorus',
+            !'aed_organic_matter',
+            !'aed_phytoplankton',
+            !'aed_zooplankton',
+            !'aed_geochemistry',
+            !'aed_seddiagenesis',
+            !'aed_tracer'
+/
+
+!-------------------------------------------------------------------------------
+! aed_sedflux
+!  sediment flux model types :
+!       "Constant" = sedimentation fluxes are constant values.
+!       "Constant2d" = Sedimentation fluxes may be different for
+!                                different benthic cells - provided by driver
+!       "Dynamic" = Sedimentation fluxes may be different for
+!                                different benthic cells at different times
+!                                        - computed by model
+!       "Dynamic2d" = Sedimentation fluxes may be different for
+!                                different benthic cells at different times
+!                                        - computed by model
+!-------------------------------------------------------------------------------
+&aed_sedflux
+   !sedflux_model = 'Constant'
+   sedflux_model = 'Spatially Variable'
+/
+&aed_sed_constant
+   Fsed_oxy = -50.0
+   Fsed_rsi = -9999
+   Fsed_amm = -9999
+   Fsed_nit = -9999
+   Fsed_frp = -9999
+   Fsed_pon = -9999
+   Fsed_don = -9999
+   Fsed_pop = -9999
+   Fsed_dop = -9999
+   Fsed_poc = -9999
+   Fsed_doc = -9999
+   Fsed_dic = -9999
+/
+&aed_sed_const2d
+   n_zones = 3
+   Fsed_oxy = -35.0,-45.0,-40.0
+   Fsed_rsi = -1e10,-1e10,-1e10
+   Fsed_amm = -1e10,-1e10,-1e10
+   Fsed_nit = -1e10,-1e10,-1e10
+   Fsed_frp = -1e10,-1e10,-1e10
+   Fsed_pon = -1e10,-1e10,-1e10
+   Fsed_don = -1e10,-1e10,-1e10
+   Fsed_pop = -1e10,-1e10,-1e10
+   Fsed_dop = -1e10,-1e10,-1e10
+   Fsed_poc = -1e10,-1e10,-1e10
+   Fsed_doc = -1e10,-1e10,-1e10
+   Fsed_dic = -1e10,-1e10,-1e10
+/
+!-------------------------------------------------------------------------------
+&aed_oxygen
+   oxy_initial = 225.0
+   Fsed_oxy = -35.0
+   Ksed_oxy = 100.0
+   theta_sed_oxy = 1.08
+   Fsed_oxy_variable = 'aed_sedflux_Fsed_oxy'
+/
+
+!-------------------------------------------------------------------------------
+&aed_carbon
+   !-- DIC and pH
+   dic_initial = 1600.5
+   Fsed_dic = 3.0
+   Ksed_dic = 20.0
+   theta_sed_dic = 1.08
+   Fsed_dic_variable='aed_sedflux_Fsed_dic'
+   pH_initial = 7.5
+   atmco2 = 370e-6
+   ionic = 0.1
+   !-- CH4
+   ch4_initial = 27.6
+   Rch4ox = 0.01
+   Kch4ox = 0.5
+   vTch4ox = 1.08
+   Fsed_ch4 = 0.5
+   Ksed_ch4 = 100.0
+   theta_sed_ch4 = 1.08
+   methane_reactant_variable='aed_oxygen_oxy'
+   !Fsed_ch4_variable='aed_sedflux_Fsed_ch4'
+/
+
+!-------------------------------------------------------------------------------
+&aed_silica
+   rsi_initial = 12.5
+   Fsed_rsi = 1.8
+   Ksed_rsi = 50.0
+   theta_sed_rsi = 1.08
+   silica_reactant_variable='aed_oxygen_oxy'
+   Fsed_rsi_variable = 'aed_sedflux_Fsed_rsi'
+/
+
+!-------------------------------------------------------------------------------
+&aed_nitrogen
+   amm_initial = 12.7, !average for 08-Sep-2009
+   nit_initial = 23.5, !average for 08-Sep-2009
+   Rnitrif = 0.1,
+   Rdenit = 0.26, !from WC denit rates
+   Fsed_amm = 7.0, !maximum measured by Keryn
+   Fsed_nit = -4.5, !maximum measured by Keryn
+   Knitrif = 78.1,
+   Kdenit = 2.0,
+   Ksed_amm = 25.0,
+   Ksed_nit = 100.0,
+   theta_nitrif = 1.08,
+   theta_denit = 1.08,
+   theta_sed_amm = 1.08,
+   theta_sed_nit = 1.08,
+   nitrif_reactant_variable='aed_oxygen_oxy',   
+   denit_product_variable='', !'aed_nitrogen_N20',
+   !Fsed_amm_variable='aed_sedflux_Fsed_amm'
+   !Fsed_nit_variable='aed_sedflux_Fsed_nit'
+/
+
+!-------------------------------------------------------------------------------
+&aed_phosphorus
+   frp_initial = 0.29
+   Fsed_frp = 0.008
+   Ksed_frp = 50.0
+   theta_sed_frp = 1.08
+   phosphorus_reactant_variable ='aed_oxygen_oxy'
+!  Fsed_frp_variable ='aed_sedflux_Fsed_frp'
+   simPO4Adsorption = .false.
+   ads_use_external_tss = .true.
+   po4sorption_target_variable =''
+   PO4AdsorptionModel = 1
+   Kpo4p = 0.1
+   ads_use_pH = .false.
+   Kadsratio= 1.0
+   Qmax = 1.0
+   w_po4ads = -1.2   ! doesnt seem to work
+/
+
+!-------------------------------------------------------------------------------
+&aed_organic_matter
+   !-- ORGANIC NITROGEN
+   pon_initial = 8.3, !average for 08-Sep-2009
+   don_initial = 14.3, !average for 08-Sep-2009
+   w_pon = -0.1,
+   Rpon_miner = 0.005,
+   Rdon_miner = 0.005,
+   Fsed_pon = 0.0,
+   Fsed_don = 0.0,
+   Kpon_miner = 31.25,
+   Kdon_miner = 31.25,
+   Ksed_don = 4.5,
+   theta_pon_miner = 1.08,
+   theta_don_miner = 1.08,
+   theta_sed_don = 1.08,
+   !pon_miner_reactant_variable='aed_oxygen_oxy',   
+   don_miner_product_variable='aed_nitrogen_amm',
+   !-- ORGANIC PHOSPHORUS
+   pop_initial = 8.3,
+   dop_initial = 4.5,
+   w_pop = -2.0,
+   Rpop_miner = 0.005,
+   Rdop_miner = 0.005,
+   Fsed_pop = 0.0,
+   Fsed_dop = 0.0,
+   Kpop_miner = 31.25,
+   Kdop_miner = 31.25,
+   Ksed_dop = 4.5,
+   theta_pop_miner = 1.08,
+   theta_dop_miner = 1.08,
+   theta_sed_dop = 1.08,
+   !pop_miner_reactant_variable='',   
+   dop_miner_product_variable='',
+    !-- ORGANIC CARBON
+   poc_initial = 78.5, !average for 08-Sep-2009
+   doc_initial = 389.9, !average for 08-Sep-2009
+   w_poc = -0.0,
+   Rpoc_miner = 0.005,
+   Rdoc_miner = 0.005,
+   Fsed_poc = 0.0,
+   Fsed_doc = 0.0,
+   Kpoc_miner = 31.25,
+   Kdoc_miner = 31.25,
+   Ksed_doc = 4.5,
+   theta_poc_miner = 1.08,
+   theta_doc_miner = 1.08,
+   theta_sed_doc = 1.08,
+   doc_miner_reactant_variable='aed_oxygen_oxy',   
+   doc_miner_product_variable='',
+   KeDOM = 0.00003
+   KePOM = 0.00003
+!  Fsed_pon_variable='aed_sedflux_Fsed_pon'
+!  Fsed_don_variable='aed_sedflux_Fsed_don'
+!  Fsed_pop_variable='aed_sedflux_Fsed_pop'
+!  Fsed_dop_variable='aed_sedflux_Fsed_dop'
+!  Fsed_poc_variable='aed_sedflux_Fsed_poc'
+!  Fsed_doc_variable='aed_sedflux_Fsed_doc'
+/
+
+
+!-------------------------------------------------------------------------------
+&aed_phytoplankton
+   num_phytos = 1
+   the_phytos = 1
+   p_excretion_target_variable='aed_organic_matter_dop'
+   n_excretion_target_variable='aed_organic_matter_don'
+   c_excretion_target_variable='aed_organic_matter_doc'
+   si_excretion_target_variable=''
+   p_mortality_target_variable='aed_organic_matter_pop'
+   n_mortality_target_variable='aed_organic_matter_pon'
+   c_mortality_target_variable='aed_organic_matter_poc'
+   si_mortality_target_variable=''
+   p1_uptake_target_variable='aed_phosphorus_frp'
+   n1_uptake_target_variable='aed_nitrogen_nit'
+   n2_uptake_target_variable='aed_nitrogen_amm'
+   si_uptake_target_variable=''
+   do_uptake_target_variable='aed_oxygen_oxy'
+   c_uptake_target_variable=''
+/
+
+!-------------------------------------------------------------------------------
+&aed_zooplankton
+   num_zoops = 1
+   the_zoops = 1
+   dn_target_variable='aed_organic_matter_don'  ! dissolved nitrogen target variable
+   pn_target_variable='aed_organic_matter_pon'  ! particulate nitrogen target variable
+   dp_target_variable='aed_organic_matter_dop'  ! dissolved phosphorus target variable
+   pp_target_variable='aed_organic_matter_pop'  ! particulate phosphorus target variable
+   dc_target_variable='aed_organic_matter_doc'  ! dissolved carbon target variable
+   pc_target_variable='aed_organic_matter_poc'  ! particulate carbon target variable
+/
+
+!-------------------------------------------------------------------------------
+&aed_zooplankton
+   num_zoops = 1
+   the_zoops = 1
+   dn_target_variable='aed_organic_matter_don'  ! dissolved nitrogen target variable
+   pn_target_variable='aed_organic_matter_pon'  ! particulate nitrogen target variable
+   dp_target_variable='aed_organic_matter_dop'  ! dissolved phosphorus target variable
+   pp_target_variable='aed_organic_matter_pop'  ! particulate phosphorus target variable
+   dc_target_variable='aed_organic_matter_doc'  ! dissolved carbon target variable
+   pc_target_variable='aed_organic_matter_poc'  ! particulate carbon target variable
+/
+
+!-------------------------------------------------------------------------------
+&aed_bacteria
+   growth = 1.0
+   mortality = 1.0
+/
+
+!-------------------------------------------------------------------------------
+&aed_viruses
+   num_viruses = 1
+/
+
+!-------------------------------------------------------------------------------
+&aed_tracer
+   num_tracers = 1
+   decay = 0 !, 0, 0, ...
+   settling = 0 !, 0, 0, ....
+   fsed = 0 !, 0, 0, ...
+/
+
+!-------------------------------------------------------------------------------
+! aed_geochemistry
+!-------------------------------------------------------------------------------
+! speciation_dt     [integer]
+!                     number of timesteps between calculations
+! geochem_file      [string]
+!                     data file with thermodynamic info for speciation calculations
+! num_components    [integer]
+!                     number of dissolved 'components' to be considered
+! dis_components    [string]
+!                     list of component names (must match those in the geochem_file)
+! component_link    [string]
+!                     name of any active variabiles to be used as a component (if present, else '')
+! Fsed_gch          [float]
+!                     sediment flux rate of dissolved components (mol/m2/day)
+! num_mineral       [integer]
+!                     number of particulate mineral phases to be included
+! the_minerals      [string]
+!                     list of mineral names (must match those in the geochem_file)
+! mineral_link      [string]
+!                     name of any active variables to be used as a mineral (if present, else '')
+! w_gch             [float]
+!                     sedimentation rate of chosen particulate phases (m/day)
+!-------------------------------------------------------------------------------
+&aed_geochemistry
+   speciation_dt  = 10
+   geochem_file   = 'aed_geochem_pars.dat'
+   num_components = 5
+   dis_components = 'DIC','Ca','PO4','FeIII','FeII'
+   component_link = 'aed_carbon_dic','','aed_phosphorus_frp','',''
+   Fsed_gch       = 0.,0.,0.,0.,0.
+ ! dis_initial    = 0.,2.,0.,0.2,0.
+   num_minerals   = 2
+   the_minerals   = 'Calcite', 'FeOH3A'
+   mineral_link   = '',''
+   w_gch          = 0.,0.
+ ! min_initial    = 0.01,0.01 
+ ! speciesOutput  = 'CO2'
+/
+
+
+! -----------------------------------------------------------------------------!
+!  AED Sediment Diagenesis model (CANDI-AED)
+! -----------------------------------------------------------------------------!
+!                                                                              !
+!-- Sediment Physical Properties                                               !
+!                                                                              !
+! diagenesis%db0     ! (cm2/yr): surface (x=0) value of the biodiffusion       !
+! diagenesis%imix    ! (0/1)   : bioturbation, 0=gaussian decrease 1=2-layer mode!
+! diagenesis%xs      ! (cm)    : if imix=0: half depth for the gaussian mixing !
+! diagenesis%x1      ! (cm)    : if imix=1: depth for start of db decrease     !
+! diagenesis%x2      ! (cm)    : if imix=1: depth where db(x) is zero (x2 > x1)!
+! diagenesis%irrig   ! (0/1)   : include bio-irrigation effects                !
+! diagenesis%alpha0  ! (1/yr)  : coefficient of irrigation                     !
+! diagenesis%xirrig  ! (cm)    : maximum depth of irrigation                   !
+! diagenesis%ventflow! (cm/yr) : advective flux, + from below, - from top      !
+! diagenesis%w00     ! (cm/yr) : sediment accumulation: burial vel as x->infinity!
+! diagenesis%p0      ! (-)     : porosity at x=0                               !
+! diagenesis%p00     ! (-)     : porosity at infinity                          !
+! diagenesis%bp      ! (-)     : if p0<>p00, porosity depth-attenuation coef   !
+! diagenesis%torteq  ! (1/2/3) : tortuosity calc: 1=archie, 2=burger, 3=weissberg!
+! diagenesis%an      ! (-)     : porosity exponent for tortuosity calc (archies) !
+! diagenesis%aa      ! (-)     : porosity exponent for tortuosity calc (burger)!
+! diagenesis%ab      ! (-)     : porosity exponent for tortuosity calc (weissberg!
+! diagenesis%xl      ! (cm)    : maximum depth for calculations                !
+! diagenesis%maxnpts ! (#)     : number of vertical layers to be included      !
+!                                                                              !
+!-- Reaction Rates                                                             !
+!                                                                              !
+! diagenesis%docl2dic  ! (1/yr): Rate of Labile DOC consumption                !
+! diagenesis%donl2din  ! (1/yr): Rate of Labile DON consumption                !
+! diagenesis%dopl2dip  ! (1/yr): Rate of Labile DOP consumption                !
+! diagenesis%pocl2docl ! (1/yr): Rate of Labile POC hydrolysis to DOCL         !
+! diagenesis%ponl2donl ! (1/yr): Rate of Labile PON hydrolysis to DONL         !
+! diagenesis%popl2dopl ! (1/yr): Rate of Labile POP hydrolysis to DOPL         !
+! diagenesis%docr2docl ! (1/yr): Rate of Refrac DOC breakdown to DOCL          !
+! diagenesis%donr2donl ! (1/yr): Rate of Refrac DON breakdown to DONL          !
+! diagenesis%dopr2dopl ! (1/yr): Rate of Refrac DOP breakdown to DOPL          !
+! diagenesis%pocr2docr ! (1/yr): Rate of Refrac POC breakdown to DOCR          !
+! diagenesis%ponr2donr ! (1/yr): Rate of Refrac PON breakdown to DONR          !
+! diagenesis%popr2dopr ! (1/yr): Rate of Refrac POP breakdown to DOPR          !
+! diagenesis%pocvr2docr! (1/yr): Rate of Very Refrac POC breakdown to DOCR     !
+! diagenesis%ponvr2donr! (1/yr): Rate of Very Refrac PON breakdown to DONR     !
+! diagenesis%popvr2dopr! (1/yr): Rate of Very Refrac POP breakdown to DOPR     !
+! diagenesis%kNH4OX    ! (1/mM/yr): Rate constant for NH4 oxidation by O2      !
+! diagenesis%kTSNO3    ! (1/mM/yr): Rate constant for H2S oxid. by NO3         !
+! diagenesis%kTSOX     ! (1/mM/yr): Rate constant for H2S oxidation by O2      !
+! diagenesis%kMnOX     ! (1/mM/yr): Rate constant for MnII oxidation by O2     !
+! diagenesis%kMnNO3    ! (1/mM/yr): Rate constant for MnII oxidation by NO3    !
+! diagenesis%kFeOX     ! (1/mM/yr): Rate constant for FeII oxidation by O2     !
+! diagenesis%kFeSOX    ! (1/mM/yr): Rate constant for FeS oxidation by O2      !
+! diagenesis%kFeS2OX   ! (1/mM/yr): Rate constant for FeS2 oxidation by O2     !
+! diagenesis%kMnAge    ! (1/mM/yr): Rate constant for MnO2(A) aging -> MnO2(B) !
+! diagenesis%kFeAge    ! (1/mM/yr): Rate constant for FeOH(A) aging -> FeOH(B) !
+! diagenesis%kFeNO3    ! (1/mM/yr): Rate constant for Fe oxidation by NO3      !
+! diagenesis%kFeSMn    ! (1/mM/yr): Rate constant for FeS oxidation by MnO2    !
+! diagenesis%kFeSFe    ! (1/mM/yr): Rate constant for FeS oxidation by Fe(OH)3 !
+! diagenesis%kFeSppt   ! (1/mM/yr): Rate constant for FeS formation from Fe2+  !
+! diagenesis%kTSFe     ! (1/mM/yr): Rate constant for H2S oxidation with Fe(OH)3    !
+! diagenesis%kPyrite   ! (1/mM/yr): Rate constant for Pyrite formation from FeS!
+! diagenesis%kMnFe     ! (1/mM/yr): Rate constant for FeII oxidation with MnO2 !
+! diagenesis%kTSMn     ! (1/mM/yr): Rate constant for H2S oxidation with MnO2  !
+! diagenesis%kCH4OX    ! (1/mM/yr): Rate constant for CH4 oxidation with O2    !
+! diagenesis%kCH4SO4   ! (1/mM/yr): Rate constant for CH4 oxidation with SO4   !
+! diagenesis%kSidppt   !       : Rate of Siderite (FeCO3) formation            !
+! diagenesis%kRodppt   !       : Rate of Rhodchros (MnCO3) formation           !
+! diagenesis%kCalppt   !       : Rate if Calcite (CaCO3) formation             !
+! diagenesis%k(p)O2    ! (mM)  : Monod constant for O2 reduction               !
+! diagenesis%k(p)NO3   ! (mM)  : Monod constant for NO3 reduction              !
+! diagenesis%k(p)MnO2  ! (mM)  : Monod constant for MnO2 reduction             !
+! diagenesis%k(p)FeOH  ! (mM)  : Monod constant for Fe(OH)3 reduction          !
+! diagenesis%k(p)SO4   ! (mM)  : Monod constant for SO4 reduction              !
+! diagenesis%kNH4Ads   ! (-)   : Adsorption constant for NH4                   !
+! diagenesis%kPO4Ads   ! (-)   : Adsorption constant for PO4                   !
+! diagenesis%X         !       : Metal to use for metal sulfide and POX/DOX    !
+! diagenesis%Xmk       !       : Stoichiometry of X in MnO2, FeOH, FeS         !
+! diagenesis%Xfl       !       : Stoichiometry of X in MnO2, FeOH, FeS         !
+! diagenesis%Xfm       !       : Stoichiometry of X in MnO2, FeOH, FeS         !
+! diagenesis%kXSppt    ! ( )   : Precipitation rate of metal sulfide           !
+! diagenesis%rxn_mode  !       : 0 = kinetic only; 1 = kinetic with IAP/Ksp    !
+!                                                                              !
+!-- Initial & Boundary Conditions                                              !
+!                                                                              !
+! diagenesis%ibc2       ! (0/1/2/3):  0=CAEDYM,                                !
+!                                     1=known conc,                            !
+!                                     2=prescr flux (requires PartFluxes.dat)  !
+!                                     3=fixed BW                               !
+! diagenesis%ibbc       ! (0/1): 0=fixed conc, 1=zero gradient                 !
+! diagenesis%strtSteady ! (0/1): Calculate a steady state for start conditions !
+! diagenesis%fluxscale  !   (-): Scale diffusive flux bewtween sed & water     !
+! diagenesis%POMVR      !   (-): frac by weight of Very Refractory Organic Matter!
+! diagenesis%InitSedDepth  !   : Initial sediment depth within the sed domain (xl)
+! diagenesis%OMInitMethodL !   : Init profile for POML (EX_I, LI_I, CO_I)      !
+! diagenesis%OM_top, OM_cf !   : EX_I initialisation params                    !
+! diagenesis%OMInitMethodR !   : Init profile for POMR (EX_I, LI_I, CO_I)      !
+! diagenesis%OM_min,InMinDep ! : LI_I initialisation params                    !
+! diagenesis%OutputUnits   !   : *.SED units: 0 = mM; 1 = mg/L                 !
+!                                                                              !
+!------------------------------------------------------------------------------!
+&aed_sed_candi
+!-- Sediment Physical Properties --!
+   diagenesis%db0       =  1.00
+   diagenesis%imix      = 0
+   diagenesis%xs        =  3.00
+   diagenesis%x1        =  9.00
+   diagenesis%x2        = 10.00
+   diagenesis%irrg     =  0
+   diagenesis%alpha0    =  5.00
+   diagenesis%xirrig    =  3.00
+   diagenesis%ventflow  =  0.00
+   diagenesis%w00       =  0.1
+   diagenesis%p0        =  0.95
+   diagenesis%p00       =  0.71
+   diagenesis%bp        =  0.22
+   diagenesis%torteq    =  3
+   diagenesis%an        =  2.14
+   diagenesis%aa        =  3.79
+   diagenesis%ab        =  2.02
+   diagenesis%xl        = 100.00
+   diagenesis%maxnpts   = 40
+!-- Reaction Rates --!
+   diagenesis%docl2dic  = 1000
+   diagenesis%donl2din  = 1000
+   diagenesis%dopl2dip  = 1000
+   diagenesis%pocl2docl = 0.1
+   diagenesis%ponl2donl = 0.1
+   diagenesis%popl2dopl = 0.1
+   diagenesis%docr2docl = 1000
+   diagenesis%donr2donl = 1000
+   diagenesis%dopr2dopl = 1000
+   diagenesis%pocr2docr =  0.001
+   diagenesis%ponr2donr =  0.001
+   diagenesis%popr2dopr =  0.001
+   diagenesis%pocvr2docr=  0.00001
+   diagenesis%ponvr2donr=  0.00001
+   diagenesis%popvr2dopr=  0.00001
+   diagenesis%kNH4OX    =  2.00E+04
+   diagenesis%kTSNO3    =  1.00E+04
+   diagenesis%kTSOX     =  6.00E+05
+   diagenesis%kMnOX     =  2.00E+06
+   diagenesis%kMnNO3    =  1e+3
+   diagenesis%kFeOX     =  2.00E+06
+   diagenesis%kFeSOX    =  2.20E+04
+   diagenesis%kFeS2OX   =  1e+4
+   diagenesis%kMnAge    =  1e+2
+   diagenesis%kFeAge    =  1e+2
+   diagenesis%kFeNO3    =  1e+3
+   diagenesis%kFeSMn    =  1e+2
+   diagenesis%kFeSFe    =  1e+1
+   diagenesis%kFeSppt   =  4.0E+00
+   diagenesis%kTSFe     =  1.00E+01
+   diagenesis%kPyrite   =  9.00E+00
+   diagenesis%kMnFe     =  1.00E+03
+   diagenesis%kTSMn     =  1.00E+01
+   diagenesis%kCH4OX    =  1.00E+07
+   diagenesis%kCH4SO4   =  2.50E+01
+   diagenesis%kSidppt   =  0.007
+   diagenesis%kRodppt   =  0.005
+   diagenesis%kCalppt   =  0.0
+   diagenesis%k(p)O2    =  0.008
+   diagenesis%k(p)NO3   =  0.030
+   diagenesis%k(p)MnO2  =  10.0
+   diagenesis%k(p)FeOH  =  10.0
+   diagenesis%k(p)SO4   =  1.000
+   diagenesis%kNH4Ads   =  0.00
+   diagenesis%kPO4Ads   =  2.00
+   diagenesis%X         =  Zn
+   diagenesis%Xmk       = 0.06
+   diagenesis%Xfl       = 0.065
+   diagenesis%Xfm       = 0.0001
+   diagenesis%kXSppt    = 1.50E+02
+   diagenesis%rxn_mode  =  0
+!-- Initial & Boundary Conditions  --!
+   diagenesis%ibc2      =  3
+   diagenesis%ibbc      =  0
+   diagenesis%strtSteady =  0
+   diagenesis%fluxscale  =  1.0
+   diagenesis%POMVR      =  0.0210
+   diagenesis%InitSedDepth  = 100.0
+   diagenesis%OMInitMethodL = EX_I
+   diagenesis%OM_top    =  1.0
+   diagenesis%OM_cf     =  0.6
+   diagenesis%OMInitMethodR = LI_I
+   diagenesis%OM_min    =  0.9
+   diagenesis%InMinDep  = 99.
+   diagenesis%OutputUnits =  1
+/
